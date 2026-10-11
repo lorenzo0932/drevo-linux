@@ -20,10 +20,19 @@ Reverse solo black-box sul device fisico; niente decompilazione.
 
 ## Installazione (un comando)
 
+Copia e incolla in un terminale (funziona dopo il push su GitHub):
+
 ```sh
-bash install.sh [--with-keyd]            # da questa cartella, oppure:
 curl -sSL https://github.com/lorenzo0932/drevo-linux/raw/main/install.sh | bash
 ```
+
+Con keyd incluso:
+
+```sh
+curl -sSL https://github.com/lorenzo0932/drevo-linux/raw/main/install.sh | bash -s -- --with-keyd
+```
+
+In locale dalla cartella del repo: `bash install.sh [--with-keyd]`.
 
 Crea un venv isolato in `~/.local/share/drevo-linux`, installa via pip
 (base + GUI), linka i comandi in `~/.local/bin`, voce di menu e regola

@@ -19,9 +19,9 @@ if [ -f ./pyproject.toml ] && [ -d ./src/drevo_control ]; then
     SRC="$(pwd)"
 else
     command -v git >/dev/null || fail "git non trovato"
-    rm -rf /tmp/opencode/drevo-src
-    git clone --depth 1 "$REPO_URL" /tmp/opencode/drevo-src || fail "clone fallito"
-    SRC=/tmp/opencode/drevo-src
+    SRC="${TMPDIR:-/tmp}/drevo-src-$$"
+    rm -rf "$SRC"
+    git clone --depth 1 "$REPO_URL" "$SRC" || fail "clone fallito"
 fi
 echo "sorgenti: $SRC"
 
