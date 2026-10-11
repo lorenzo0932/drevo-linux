@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Test GUI offscreen: pagine, tema, chiavi, profili (no hardware)."""
 
+import contextlib
 import os
 import tempfile
 from unittest import mock
@@ -64,9 +65,6 @@ class FakeDev:
         pass
 
 
-import contextlib
-
-
 @contextlib.contextmanager
 def fake_open():
     yield FakeDev()
@@ -121,7 +119,7 @@ profiles.plist.setCurrentRow(0)
 applied = {}
 
 
-def fake_apply(profile):
+def fake_apply(profile, pause=True):
     applied["p"] = profile
     return True, "ok"
 

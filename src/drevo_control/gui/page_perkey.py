@@ -15,6 +15,7 @@ from drevo_control.protocol import board as B
 from drevo_control.protocol.commands import indiv_packet
 from drevo_control.protocol.device import open_control
 from drevo_control.protocol.keymap import BY_NAME
+from drevo_control.gui.settings_state import pause_enabled
 from drevo_control.lock import hid_writer_lock
 
 
@@ -150,7 +151,6 @@ class PerKeyPage(QWidget):
         self.view.paint_colors(self.pending)
 
     def _write_all(self, packets):
-        from drevo_control.oslayer.daemon import pause_enabled
         paused = pause_enabled()
         if paused:
             pause_daemon()

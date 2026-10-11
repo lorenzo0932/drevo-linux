@@ -1,11 +1,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Luci: effetto firmware + parametri, scrittura sotto pausa daemon."""
 
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QCheckBox, QColorDialog, QComboBox,
-                               QFormLayout, QGroupBox, QHBoxLayout, QLabel,
+                               QFormLayout, QHBoxLayout, QLabel,
                                QPushButton, QSlider, QVBoxLayout, QWidget)
 
+from drevo_control.gui.settings_state import pause_enabled
 from drevo_control.gui.widgets import hint, note, padded, section
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import commands as C
@@ -78,7 +80,6 @@ class LightsPage(QWidget):
         layout.addStretch(1)
 
     def _slider(self, value):
-        from PySide6.QtCore import Qt
         s = QSlider(Qt.Horizontal)
         s.setRange(0, 100)
         s.setValue(value)
@@ -117,7 +118,6 @@ class LightsPage(QWidget):
         return (color.red(), color.green(), color.blue())
 
     def apply(self):
-        from drevo_control.oslayer.daemon import pause_enabled
         cmd = EFFECTS[self.effect.currentIndex()][1]
         pkt = C.effect_packet(
             cmd, self._rgb(self.color1),

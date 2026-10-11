@@ -1,12 +1,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Finestra principale: navigazione laterale + pagine."""
 
+import glob
 import subprocess
+import sys
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QListWidget, QMainWindow,
                                QScrollArea, QStackedWidget, QStatusBar,
-                               QWidget)
+                               QApplication, QWidget)
 
 from drevo_control.gui import theme as T
 from drevo_control.gui.page_keys import KeysPage
@@ -24,7 +26,6 @@ def _is_active(unit, user=False):
 
 
 def _device_present():
-    import glob
     return bool(glob.glob("/dev/input/by-id/*Drevo*"))
 
 
@@ -100,11 +101,8 @@ class MainWindow(QMainWindow):
             f"<font color='{green if keyd else gray}'>●</font> keyd")
 
 
-def main():
-    import sys
-
-    from PySide6.QtWidgets import QApplication
-    app = QApplication(sys.argv)
+def main(argv=None):
+    app = QApplication(sys.argv if argv is None else argv)
     win = MainWindow()
     win.show()
     sys.exit(app.exec())

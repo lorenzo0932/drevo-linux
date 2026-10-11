@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Tema chiaro/scuro con follow di sistema e override manuale."""
 
-from PySide6.QtCore import QSettings
+import importlib.resources
+
+from PySide6.QtCore import QSettings, Qt
+from PySide6.QtGui import QColor, QPalette
+from PySide6.QtWidgets import QApplication
 
 ORG, APP = "drevo-control", "drevo-control"
 
@@ -20,12 +24,8 @@ DARK = {
 
 
 def build_qss(p):
-    try:
-        import importlib.resources
-        chevron = importlib.resources.files("drevo_control.data").joinpath(
-            "chevron-down.svg")
-    except (ImportError, ModuleNotFoundError):
-        chevron = "chevron-down.svg"
+    chevron = importlib.resources.files("drevo_control.data").joinpath(
+        "chevron-down.svg")
     return f"""
 QMainWindow, QWidget#page {{ background: {p['bg']}; color: {p['fg']}; }}
 QListWidget#nav {{ background: {p['nav']}; border: none; font-size: 15px; }}
@@ -78,6 +78,9 @@ def system_scheme():
     """'dark'/'light' dal portale FreeDesktop, fallback styleHints."""
     try:
         from PySide6.QtDBus import QDBusConnection, QDBusInterface
+    except ImportError:
+        return "light"
+    try:
         bus = QDBusConnection.sessionBus()
         iface = QDBusInterface("org.freedesktop.portal.Desktop",
                                "/org/freedesktop/portal/desktop",
@@ -89,8 +92,6 @@ def system_scheme():
     except Exception:
         pass
     try:
-        from PySide6.QtWidgets import QApplication
-        from PySide6.QtCore import Qt
         hints = QApplication.instance().styleHints()
         scheme = hints.colorScheme()
         if scheme == Qt.ColorScheme.Dark:
@@ -118,8 +119,6 @@ def resolve(mode=None):
 
 
 def apply_theme(window, mode=None):
-    from PySide6.QtGui import QColor, QPalette
-
     pal = DARK if resolve(mode) == "dark" else LIGHT
     window.setStyleSheet(build_qss(pal))
     palette = window.palette()
@@ -133,10 +132,6 @@ def apply_theme(window, mode=None):
     palette.setColor(QPalette.Highlight, QColor(pal["accent"]))
     palette.setColor(QPalette.HighlightedText, QColor("white"))
     window.setPalette(palette)
-    try:
-        from PySide6.QtWidgets import QApplication
-        inst = QApplication.instance()
-        if inst is not None:
-            inst.setPalette(palette)
-    except Exception:
-        pass
+    inst = QApplication.instance()
+    if inst is not None:
+        inst.setPalette(palette)
