@@ -1,5 +1,9 @@
 # Documentazione tecnica — Drevo Control
 
+> [!NOTE]
+> Progetto sperimentale: queste pagine descrivono lo stato di fatto,
+> l'interfaccia e' la parte piu' instabile.
+
 Per categoria, stato dell'arte: ogni documento descrive un sottosistema,
 i file coinvolti e come verificarlo.
 

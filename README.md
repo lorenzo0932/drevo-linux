@@ -3,12 +3,18 @@
 ![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)
 ![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
 ![Platform: Linux](https://img.shields.io/badge/Platform-Linux-blue.svg)
+![Status: experimental](https://img.shields.io/badge/Status-experimental-orange.svg)
 
 Controllo Linux con GUI per tastiere Drevo su controller Winbond
 (`0416:a0f8` — Tyrfing V2 / Calibur V2 TE), a parita' funzionale di
 Drevo Power Console per le funzioni device-local.
 
 Stato: funzionante e verificato su hardware (0416:a0f8).
+
+> [!WARNING]
+> Progetto sperimentale: il core (protocollo, CLI, profili) e' stabile e
+> testato, ma l'interfaccia grafica e' ancora grezza e in evoluzione —
+> aspettatevi spigoli vivi su look e layout.
 
 ## Indice
 
