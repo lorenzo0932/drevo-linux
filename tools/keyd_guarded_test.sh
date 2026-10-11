@@ -9,21 +9,22 @@ set -u
 
 CONF="${1:?uso: $0 <file.conf> [secondi]}"
 TIMEOUT="${2:-45}"
-REPO="$(cd "$(dirname "$0")/.." && pwd)"
+MAIN_CONF="/etc/keyd/keyd.conf"
+BACKUP="/tmp/opencode/keyd-base.conf"
 
-echo "installo config di test: $CONF"
-sudo install -D -m 644 "$CONF" /etc/keyd/conf.d/00-test.conf
+echo "backup base e installo config di test come $MAIN_CONF"
+cp "$MAIN_CONF" "$BACKUP"
+sudo install -D -m 644 "$CONF" "$MAIN_CONF"
 sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
 sleep 1
 
 if timeout "$TIMEOUT" zenity --question \
     --text="Prova la modifica (es. BLOC MAIUSC ora e' ESC).\n\nOK = funziona, tengo la modifica.\nScadenza tra ${TIMEOUT}s = ritorno alla config base." \
     --ok-label="Funziona, tieni" --cancel-label="Torna alla base" 2>/dev/null; then
-    echo "confermato via mouse: tengo la config di test come base"
-    sudo mv /etc/keyd/conf.d/00-test.conf /etc/keyd/conf.d/10-drevo.conf
-    sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
+    echo "confermato via mouse: tengo la nuova config (gia' in keyd.conf)"
 else
     echo "nessuna conferma: torno alla config base (keyd resta installato)"
+    sudo install -m 644 "$BACKUP" "$MAIN_CONF"
     sudo rm -f /etc/keyd/conf.d/00-test.conf
     sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
     systemctl is-active keyd
