@@ -44,44 +44,20 @@ def _cmd_kbd(args):
 
 
 def _cmd_profile_apply(args):
-    import subprocess
+    import sys
 
-    from drevo_control.oslayer import render_keyd
+    from drevo_control.oslayer.apply import apply_profile
     from drevo_control.oslayer.profiles import load_profile
 
     profile = load_profile(args.name)
-    # 1. pausa daemon ambilight (evita scritture concorrenti)
-    subprocess.run(["systemctl", "--user", "stop",
-                    "ambilight-keyboard.service"], check=False)
     try:
-        # 2. luci via HID (sotto lock)
-        lighting = profile.lighting or {}
-        effect = lighting.get("effect", "static")
-        rgb = tuple(lighting.get("rgb", (255, 255, 255)))
-        cmd = {"static": C.CMD_STATIC, "breath": C.CMD_BREATH,
-               "stream": C.CMD_STREAM, "radar": C.CMD_RADAR,
-               "mem": C.CMD_MEM}[effect]
-        pkt = C.effect_packet(cmd, rgb,
-                              brightness=lighting.get("bri", 100),
-                              speed=lighting.get("speed", 100))
-        write_packet(pkt)
-        # 3. tasti via keyd
-        cfg = render_keyd(profile)
-        with open("/tmp/opencode/keyd-profile.conf", "w") as f:
-            f.write(cfg)
-        subprocess.run(["sudo", "install", "-m", "644",
-                        "/tmp/opencode/keyd-profile.conf",
-                        "/etc/keyd/keyd.conf"], check=True)
-        # keyd non supporta reload: restart se il reload fallisce
-        r = subprocess.run(["sudo", "systemctl", "reload", "keyd"])
-        if r.returncode != 0:
-            subprocess.run(["sudo", "systemctl", "restart", "keyd"],
-                           check=True)
-    finally:
-        # 4. il daemon riparte e riprende le luci (i tasti restano a keyd)
-        subprocess.run(["systemctl", "--user", "start",
-                        "ambilight-keyboard.service"], check=False)
-    print("ok")
+        ok, msg = apply_profile(profile)
+    except RuntimeError as e:
+        print(f"errore: {e}", file=sys.stderr)
+        raise SystemExit(1)
+    print(msg)
+    if not ok:
+        raise SystemExit(1)
 
 
 def main(argv=None):

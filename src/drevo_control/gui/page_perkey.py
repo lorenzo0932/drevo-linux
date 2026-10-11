@@ -112,7 +112,10 @@ class PerKeyPage(QWidget):
             self.assigned.addItem(f"{name}  #{r:02x}{g:02x}{b:02x}")
 
     def _write_all(self, packets):
-        pause_daemon()
+        from drevo_control.oslayer.daemon import pause_enabled
+        paused = pause_enabled()
+        if paused:
+            pause_daemon()
         try:
             with hid_writer_lock() as locked:
                 if not locked:
@@ -121,7 +124,8 @@ class PerKeyPage(QWidget):
                     for pkt in packets:
                         dev.write(pkt)
         finally:
-            resume_daemon()
+            if paused:
+                resume_daemon()
 
     def apply(self):
         if not self.pending:

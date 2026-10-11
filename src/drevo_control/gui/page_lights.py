@@ -47,10 +47,10 @@ class LightsPage(QWidget):
         form.addRow("Colori:", row)
         self._refresh_swatches()
 
-        self.bri = self._slider(100)
-        form.addRow("Luminosità (%):", self.bri)
-        self.speed = self._slider(100)
-        form.addRow("Velocità (%):", self.speed)
+        self.bri, bri_val = self._slider(100)
+        form.addRow("Luminosità:", self._labeled(self.bri, bri_val))
+        self.speed, speed_val = self._slider(100)
+        form.addRow("Velocità:", self._labeled(self.speed, speed_val))
 
         self.direction = QComboBox()
         for label, _ in DIRECTIONS:
@@ -74,7 +74,20 @@ class LightsPage(QWidget):
         s = QSlider(Qt.Horizontal)
         s.setRange(0, 100)
         s.setValue(value)
-        return s
+        val = QLabel(f"{value}%")
+        val.setMinimumWidth(44)
+        s.valueChanged.connect(lambda v: val.setText(f"{v}%"))
+        return s, val
+
+    @staticmethod
+    def _labeled(slider, label):
+        row = QHBoxLayout()
+        row.addWidget(slider, 1)
+        row.addWidget(label)
+        box = QWidget()
+        box.setLayout(row)
+        box.setContentsMargins(0, 0, 0, 0)
+        return box
 
     def _pick(self, which):
         color = QColorDialog.getColor(
@@ -96,6 +109,7 @@ class LightsPage(QWidget):
         return (color.red(), color.green(), color.blue())
 
     def apply(self):
+        from drevo_control.oslayer.daemon import pause_enabled
         cmd = EFFECTS[self.effect.currentIndex()][1]
         pkt = C.effect_packet(
             cmd, self._rgb(self.color1),
@@ -103,9 +117,12 @@ class LightsPage(QWidget):
             brightness=self.bri.value(),
             direction=DIRECTIONS[self.direction.currentIndex()][1],
             rainbow=self.rainbow.isChecked())
-        pause_daemon()
+        paused = pause_enabled()
+        if paused:
+            pause_daemon()
         try:
             write_packet(pkt)
         finally:
-            resume_daemon()
+            if paused:
+                resume_daemon()
         self.status.setText("Applicato.")

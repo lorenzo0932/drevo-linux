@@ -1,0 +1,1 @@
+"""Dati shippati (regole udev)."""

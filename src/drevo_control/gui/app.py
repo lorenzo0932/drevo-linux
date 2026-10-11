@@ -1,25 +1,28 @@
 """Finestra principale: navigazione laterale + pagine."""
 
-import importlib.resources
-
 from PySide6.QtWidgets import (QHBoxLayout, QListWidget, QMainWindow,
                                QStackedWidget, QWidget)
 
+from drevo_control.gui import theme as T
+from drevo_control.gui.page_keys import KeysPage
 from drevo_control.gui.page_lights import LightsPage
 from drevo_control.gui.page_perkey import PerKeyPage
+from drevo_control.gui.page_profiles import ProfilesPage
+from drevo_control.gui.page_settings import SettingsPage
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Drevo Control")
-        self.resize(860, 600)
+        self.resize(900, 640)
+        T.apply_theme(self)
 
         try:
-            qss = importlib.resources.read_text("drevo_control.gui",
-                                                "style.qss")
-            self.setStyleSheet(qss)
-        except (FileNotFoundError, ModuleNotFoundError):
+            self.styleHints().colorSchemeChanged.connect(
+                lambda: T.apply_theme(self)
+                if T.saved_mode() == "auto" else None)
+        except (AttributeError, RuntimeError):
             pass
 
         central = QWidget()
@@ -31,10 +34,16 @@ class MainWindow(QMainWindow):
         self.nav.setFixedWidth(180)
         self.stack = QStackedWidget()
 
-        self.pages = [("Luci", LightsPage()),
+        lights = LightsPage()
+        keys = KeysPage()
+        profiles = ProfilesPage()
+        profiles.set_sources(lights, keys)
+        settings = SettingsPage(self)
+        self.pages = [("Luci", lights),
                       ("Per-key", PerKeyPage()),
-                      ("Tasti e Macro", QWidget()),
-                      ("Profili", QWidget())]
+                      ("Tasti e Macro", keys),
+                      ("Profili", profiles),
+                      ("Impostazioni", settings)]
         for label, page in self.pages:
             page.setObjectName("page")
             self.nav.addItem(label)

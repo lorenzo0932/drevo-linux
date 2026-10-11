@@ -21,4 +21,4 @@ drevo-control = "drevo_control.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-drevo_control = ["gui/*.qss"]
+drevo_control = ["gui/*.qss", "data/*.rules"]

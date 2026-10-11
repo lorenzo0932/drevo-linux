@@ -14,6 +14,9 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/opencode/shots"
 os.makedirs(OUT, exist_ok=True)
 
 app = QApplication([])
+if len(sys.argv) > 2:
+    from drevo_control.gui import theme as T
+    T.save_mode(sys.argv[2])
 win = MainWindow()
 win.show()
 for row in range(win.nav.count()):
