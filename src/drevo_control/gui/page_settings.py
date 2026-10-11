@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGroupBox,
 
 from drevo_control import __version__
 from drevo_control.gui import theme as T
-from drevo_control.gui.widgets import hint, padded
+from drevo_control.gui.widgets import hint, padded, section
 from drevo_control.oslayer.apply import keyd_active
 
 
@@ -27,8 +27,11 @@ class SettingsPage(QWidget):
         layout.addWidget(title)
         layout.addWidget(hint("Tema, coordinamento e componenti di sistema."))
 
-        box = QGroupBox("Aspetto")
-        form = QFormLayout(box)
+        layout.addWidget(section("Aspetto"))
+        form = QFormLayout()
+        form.setHorizontalSpacing(12)
+        form.setVerticalSpacing(10)
+        form.setContentsMargins(0, 4, 0, 0)
         self.theme = QComboBox()
         self.theme.addItems(["auto", "chiaro", "scuro"])
         self.theme.setCurrentText({"auto": "auto", "light": "chiaro",
@@ -36,10 +39,14 @@ class SettingsPage(QWidget):
                                                         "auto"))
         self.theme.currentTextChanged.connect(self._theme_changed)
         form.addRow("Tema:", self.theme)
-        layout.addWidget(box)
+        form_box = QWidget()
+        form_box.setLayout(form)
+        layout.addWidget(form_box)
 
-        box2 = QGroupBox("Coordinamento")
-        form2 = QVBoxLayout(box2)
+        layout.addWidget(section("Coordinamento"))
+        form2 = QVBoxLayout()
+        form2.setContentsMargins(0, 4, 0, 0)
+        form2.setSpacing(8)
         self.pause = QCheckBox("Metti in pausa l'ambilight durante le "
                               "scritture (consigliato)")
         from PySide6.QtCore import QSettings
@@ -49,10 +56,14 @@ class SettingsPage(QWidget):
         self.pause.toggled.connect(
             lambda v: self._settings.setValue("daemon/pause", bool(v)))
         form2.addWidget(self.pause)
-        layout.addWidget(box2)
+        coord_box = QWidget()
+        coord_box.setLayout(form2)
+        layout.addWidget(coord_box)
 
-        box3 = QGroupBox("Sistema")
-        form3 = QVBoxLayout(box3)
+        layout.addWidget(section("Sistema"))
+        form3 = QVBoxLayout()
+        form3.setContentsMargins(0, 4, 0, 0)
+        form3.setSpacing(8)
         self.keyd_label = QLabel()
         row = QHBoxLayout()
         install = QPushButton("Installa keyd (COPR)")
@@ -70,7 +81,9 @@ class SettingsPage(QWidget):
         udev_row.addWidget(self.udev_label, 1)
         udev_row.addWidget(udev_btn)
         form3.addLayout(udev_row)
-        layout.addWidget(box3)
+        sys_box = QWidget()
+        sys_box.setLayout(form3)
+        layout.addWidget(sys_box)
         self.refresh_system()
 
         info = QLabel(f"drevo-control {__version__} — GPL-3.0-or-later\n"

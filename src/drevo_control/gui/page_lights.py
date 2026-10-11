@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (QCheckBox, QColorDialog, QComboBox,
                                QFormLayout, QGroupBox, QHBoxLayout, QLabel,
                                QPushButton, QSlider, QVBoxLayout, QWidget)
 
-from drevo_control.gui.widgets import hint, note, padded
+from drevo_control.gui.widgets import hint, note, padded, section
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import commands as C
 from drevo_control.protocol.device import write_packet
@@ -32,11 +32,10 @@ class LightsPage(QWidget):
                               "L'applicazione mette in pausa l'ambilight "
                               "per il tempo della scrittura."))
 
-        box = QGroupBox("Effetto")
-        form = QFormLayout(box)
+        layout.addWidget(section("Effetto"))
+        form = QFormLayout()
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(10)
-        form.setContentsMargins(16, 16, 16, 16)
         self.effect = QComboBox()
         for label, _ in EFFECTS:
             self.effect.addItem(label)
@@ -65,7 +64,9 @@ class LightsPage(QWidget):
         form.addRow("Direzione:", self.direction)
         self.rainbow = QCheckBox("Arcobaleno (solo statico)")
         form.addRow("", self.rainbow)
-        layout.addWidget(box)
+        form_box = QWidget()
+        form_box.setLayout(form)
+        layout.addWidget(form_box)
 
         actions = QHBoxLayout()
         apply_btn = QPushButton("Applica")

@@ -78,9 +78,9 @@ class KeyboardView(QWidget):
                 continue
             btn = QPushButton(DISPLAY.get(name, name.upper()))
             font = btn.font()
-            font.setPointSize(9)
+            font.setPointSize(8)
             btn.setFont(font)
-            btn.setFixedHeight(42)
+            btn.setFixedHeight(38)
             btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             btn.setProperty("keyname", name)
             if name == "FN":

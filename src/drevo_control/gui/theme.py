@@ -24,7 +24,9 @@ QMainWindow, QWidget#page {{ background: {p['bg']}; color: {p['fg']}; }}
 QListWidget#nav {{ background: {p['nav']}; border: none; font-size: 15px; }}
 QListWidget#nav::item {{ padding: 10px 14px; border-radius: 8px; }}
 QListWidget#nav::item:selected {{ background: {p['sel']}; color: {p['sel_fg']}; }}
-QLabel#title {{ font-size: 22px; font-weight: 800; }}
+QLabel#title {{ font-size: 24px; font-weight: 800; }}
+QLabel#section {{ font-size: 15px; font-weight: 700;
+    margin-top: 10px; }}
 QLabel#hint {{ color: {p['muted']}; }}
 QLabel[kind="ok"] {{ color: #26a269; font-weight: 700; }}
 QLabel[kind="error"] {{ color: #c01c28; font-weight: 700; }}

@@ -7,7 +7,8 @@ from PySide6.QtWidgets import (QColorDialog, QComboBox, QGroupBox, QHBoxLayout,
                                QVBoxLayout, QWidget)
 
 from drevo_control.gui.keyboard_view import KeyboardView
-from drevo_control.gui.widgets import hint, note, padded, toggle_empty
+from drevo_control.gui.widgets import hint, note, padded, section, \
+    toggle_empty
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import board as B
 from drevo_control.protocol.commands import indiv_packet
@@ -32,7 +33,7 @@ class PerKeyPage(QWidget):
                               "I tasti non elencati restano come sono."))
 
         self.view = KeyboardView()
-        self.view.setMinimumWidth(1060)
+        self.view.setMinimumWidth(880)
         self.view.keySelected.connect(self._from_view)
         view_scroll = QScrollArea()
         view_scroll.setWidgetResizable(True)
@@ -42,8 +43,10 @@ class PerKeyPage(QWidget):
         view_scroll.setWidget(self.view)
         layout.addWidget(view_scroll)
 
-        box = QGroupBox("Assegnazioni")
-        form = padded(QVBoxLayout(box))
+        layout.addWidget(section("Assegnazioni"))
+        form = QVBoxLayout()
+        form.setContentsMargins(0, 4, 0, 0)
+        form.setSpacing(8)
         row = QHBoxLayout()
         self.keysel = QComboBox()
         self.keysel.setEditable(True)
@@ -68,10 +71,14 @@ class PerKeyPage(QWidget):
         rm = QPushButton("Rimuovi selezionato")
         rm.clicked.connect(self._remove)
         form.addWidget(rm)
-        layout.addWidget(box)
+        form_box = QWidget()
+        form_box.setLayout(form)
+        layout.addWidget(form_box)
 
-        box2 = QGroupBox("Tutta la tastiera")
-        row2 = QHBoxLayout(box2)
+        layout.addWidget(section("Tutta la tastiera"))
+        row2 = QHBoxLayout()
+        row2.setContentsMargins(0, 4, 0, 0)
+        row2.setSpacing(8)
         self.board_color_btn = QPushButton("Colore board")
         self.board_color_btn.setObjectName("swatch")
         self.board_color_btn.clicked.connect(self._pick_board)
@@ -82,7 +89,9 @@ class PerKeyPage(QWidget):
         apply_board.clicked.connect(self.apply_board)
         row2.addWidget(self.board_color_btn)
         row2.addWidget(apply_board)
-        layout.addWidget(box2)
+        row2_box = QWidget()
+        row2_box.setLayout(row2)
+        layout.addWidget(row2_box)
 
         apply_btn = QPushButton("Applica assegnazioni")
         apply_btn.setObjectName("accent")

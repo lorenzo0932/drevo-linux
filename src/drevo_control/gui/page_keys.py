@@ -5,7 +5,8 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QGroupBox,
                                QPushButton, QSpinBox, QTextEdit, QVBoxLayout,
                                QWidget)
 
-from drevo_control.gui.widgets import hint, note, padded, toggle_empty
+from drevo_control.gui.widgets import hint, note, padded, section, \
+    toggle_empty
 from drevo_control.oslayer import RemapProfile
 from drevo_control.oslayer.apply import install_keyd_conf, keyd_active
 
@@ -43,8 +44,10 @@ class KeysPage(QWidget):
                               "toggle. Installa quando hai finito."))
 
         self.remap_list = QListWidget()
-        box = QGroupBox("Rimappature")
-        form = padded(QVBoxLayout(box))
+        layout.addWidget(section("Rimappature"))
+        form = QVBoxLayout()
+        form.setContentsMargins(0, 4, 0, 0)
+        form.setSpacing(8)
         row = QHBoxLayout()
         self.remap_src = _key_combo()
         self.remap_dst = _key_combo()
@@ -62,12 +65,16 @@ class KeysPage(QWidget):
         rm.clicked.connect(lambda: self._remove_sel(self.remap_list,
                                                     self._remaps))
         form.addWidget(rm)
-        layout.addWidget(box)
+        remap_box = QWidget()
+        remap_box.setLayout(form)
+        layout.addWidget(remap_box)
         self._remaps = {}
 
         self.macro_list = QListWidget()
-        box2 = QGroupBox("Macro")
-        form2 = padded(QVBoxLayout(box2))
+        layout.addWidget(section("Macro"))
+        form2 = QVBoxLayout()
+        form2.setContentsMargins(0, 4, 0, 0)
+        form2.setSpacing(8)
         row2 = QHBoxLayout()
         self.macro_key = _key_combo()
         self.macro_seq = QLineEdit()
@@ -90,18 +97,24 @@ class KeysPage(QWidget):
         rm2.clicked.connect(lambda: self._remove_sel(self.macro_list,
                                                      self._macros))
         form2.addWidget(rm2)
-        layout.addWidget(box2)
+        macro_box = QWidget()
+        macro_box.setLayout(form2)
+        layout.addWidget(macro_box)
         self._macros = {}
 
-        box3 = QGroupBox("Game mode")
-        form3 = padded(QHBoxLayout(box3))
+        layout.addWidget(section("Game mode"))
+        form3 = QHBoxLayout()
+        form3.setContentsMargins(0, 4, 0, 0)
+        form3.setSpacing(8)
         self.game_on = QCheckBox("Attiva game mode (Win disabilitati)")
         self.game_toggle = _key_combo()
         self.game_toggle.setCurrentText("f12")
         form3.addWidget(self.game_on)
         form3.addWidget(QLabel("Toggle:"))
         form3.addWidget(self.game_toggle)
-        layout.addWidget(box3)
+        game_box = QWidget()
+        game_box.setLayout(form3)
+        layout.addWidget(game_box)
 
         actions = QHBoxLayout()
         preview = QPushButton("Anteprima config")

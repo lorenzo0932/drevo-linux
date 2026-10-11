@@ -31,7 +31,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Drevo Control")
-        self.resize(920, 660)
+        self.resize(1080, 680)
+        self.setMinimumSize(700, 500)
         T.apply_theme(self)
 
         try:

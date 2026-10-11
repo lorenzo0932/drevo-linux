@@ -10,6 +10,12 @@ def padded(layout, margin=16, spacing=10):
     return layout
 
 
+def section(text):
+    label = QLabel(text)
+    label.setObjectName("section")
+    return label
+
+
 def hint(text):
     label = QLabel(text)
     label.setObjectName("hint")
