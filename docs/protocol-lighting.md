@@ -41,13 +41,18 @@ mem.txt` in /tmp/opencode (non committate).
 
 ## Per-key (prefisso `06 be 19 00 01 01 0e`)
 
-- 1 tasto: 32B, key-id a byte 7, RGB a 12–14. Key-id = HID usage ID
-  standard (es. `a` = `0x04`).
-- n tasti (≤5): `12+4n` B, key-id a byte 7–11, poi RGB+`00` per tasto.
-  Lunghezze n=2..4 DA VERIFICARE.
+- Key-id = HID usage ID standard (es. `a` = `0x04`); mappa UK-ISO in
+  `protocol/keymap.py` (87 usage, FN hardware-only).
+- Lunghezze pacchetto OSSERVATE e re-verificate su secondo run
+  (`{1: 32, 2: 28, 3: 24, 4: 28, 5: 32}` B); meccanismo lato hidraw non
+  indagato, tabella empirica in `commands.indiv_packet`.
 - `kbd()`: apertura `06 be 15 00 01 01 0f` (bri a byte 8, `ff` a 12),
-  gruppi da 5 (primo con marcatori byte15=`0x53`, byte31=`0x65`),
-  chiusura `06 be 15 00 02 01 01 05 09 ... ff ... ff`.
+  18 gruppi (17x5+2, primo con marcatori byte15=`0x53`, byte31=`0x65`),
+  chiusura `06 be 15 00 02 01 01 05 09 ... ff ... ff`. 20 pacchetti
+  (vs 23 del riferimento: copriamo solo i tasti fisici, meno stress
+  per il controller Winbond).
+- Test hardware 2026-10-11: `key a` e `kbd` byte-identici ai riferimenti,
+  device risponde, 21 scritture in una finestra senza flap.
 
 ## Implementazione
 `src/drevo_control/protocol/` replica questi formati con codice

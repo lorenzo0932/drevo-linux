@@ -51,4 +51,25 @@ assert C.kbd_open_packet()[:13] == \
 assert C.kbd_close_packet()[:17] == \
     [6, 0xBE, 0x15, 0, 2, 1, 1, 5, 9, 0, 0, 0, 0xFF, 0, 0, 0, 0xFF]
 
+# keymap: 87 usage unici (FN = hardware-only, senza usage)
+from drevo_control.protocol.keymap import ALL_IDS, BY_NAME
+
+assert len(ALL_IDS) == 87 and len(set(ALL_IDS)) == 87
+assert BY_NAME["a"] == 0x04 and BY_NAME["esc"] == 0x29
+assert BY_NAME["enter"] == 0x28 and BY_NAME["space"] == 0x2C
+
+# board: kbd = open + 18 gruppi + close, primo con marcatori
+from drevo_control.protocol import board as B
+
+pkts = B.kbd_packets((0xD1, 0xD2, 0xD3))
+assert len(pkts) == 20, len(pkts)
+assert pkts[0][:13] == C.kbd_open_packet()[:13]
+assert pkts[1][15] == 0x53 and pkts[1][31] == 0x65
+assert pkts[-1][:9] == C.kbd_close_packet()[:9]
+assert len(pkts[-2]) == 28  # ultimo gruppo da 2 tasti
+assert all(len(p) == 32 for p in pkts[1:-2])
+
+# key singolo per nome
+assert B.key_packets("a", (5, 6, 7))[0][7] == 0x04
+
 print("builder ok: tutti i byte corrispondono alle catture")

@@ -43,12 +43,14 @@ def effect_packet(cmd, color1, color2=(0xFF, 0, 0), speed=100,
 
 
 def indiv_packet(key_ids, colors):
-    """Pacchetto per-key, 1-5 tasti. key_ids: HID usage ID. Lunghezze
-    osservate: 1 tasto -> 32B; n tasti -> 12+4n B. n=2..4 DA VERIFICARE."""
+    """Pacchetto per-key, 1-5 tasti. key_ids: HID usage ID.
+
+    Lunghezze OSSERVATE su usbmon (stabili tra run, meccanismo lato
+    hidraw non indagato): {1: 32, 2: 28, 3: 24, 4: 28, 5: 32}."""
     if not 1 <= len(key_ids) <= 5 or len(key_ids) != len(colors):
         raise ValueError("1-5 tasti con altrettanti colori")
     n = len(key_ids)
-    pkt = [0] * (32 if n == 1 else 12 + 4 * n)
+    pkt = [0] * {1: 32, 2: 28, 3: 24, 4: 28, 5: 32}[n]
     pkt[:7] = INDIV_PREFIX
     pkt[7:7 + 5] = list(key_ids) + [0] * (5 - n)
     for i, color in enumerate(colors):
