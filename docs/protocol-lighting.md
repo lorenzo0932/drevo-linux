@@ -53,6 +53,9 @@ mem.txt` in /tmp/opencode (non committate).
   per il controller Winbond).
 - Test hardware 2026-10-11: `key a` e `kbd` byte-identici ai riferimenti,
   device risponde, 21 scritture in una finestra senza flap.
+- Osservazione utente: dopo `key enter` rosso, il tasto FN e' apparso
+  bianco. Ipotesi: FN ha LED bianco dedicato (non RGB) che in modalita'
+  per-key custom cade sul default; da confermare con `kbd` full-board.
 
 ## Implementazione
 `src/drevo_control/protocol/` replica questi formati con codice
