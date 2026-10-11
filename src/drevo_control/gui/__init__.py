@@ -1,1 +1,5 @@
-"""GUI Qt (PySide6) a parita' di flussi DPC. Implementata in Fase 4."""
+"""Punto d'ingresso GUI."""
+
+from drevo_control.gui.app import main
+
+__all__ = ["main"]
