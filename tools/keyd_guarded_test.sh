@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Test guidato di una config keyd con revert automatico.
+# Test guidato di una config keyd con ritorno automatico alla base.
 # Uso: keyd_guarded_test.sh <file.conf> [secondi]
-# Installa la config, ricarica keyd, chiede conferma VIA MOUSE (zenity).
-# Allo scadere del timeout o su risposta negativa: rollback automatico.
+# Installa la config di test, ricarica keyd, chiede conferma VIA MOUSE.
+# Allo scadere del timeout o su risposta negativa: torna alla config base
+# (keyd resta installato). La rimozione completa resta in keyd_rollback.sh.
 # Pensato per il caso peggiore (tastiera muta): non serve digitare nulla.
 set -u
 
@@ -16,11 +17,14 @@ sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
 sleep 1
 
 if timeout "$TIMEOUT" zenity --question \
-    --text="Prova a scrivere con la tastiera Drevo.\n\nOK = funziona, tengo la config.\nScadenza tra ${TIMEOUT}s = rollback automatico." \
-    --ok-label="Funziona, tieni" --cancel-label="Ripristina subito" 2>/dev/null; then
-    echo "confermato via mouse: tengo la config"
-    sudo rm -f /etc/keyd/conf.d/00-test.conf
+    --text="Prova la modifica (es. BLOC MAIUSC ora e' ESC).\n\nOK = funziona, tengo la modifica.\nScadenza tra ${TIMEOUT}s = ritorno alla config base." \
+    --ok-label="Funziona, tieni" --cancel-label="Torna alla base" 2>/dev/null; then
+    echo "confermato via mouse: tengo la config di test come base"
+    sudo mv /etc/keyd/conf.d/00-test.conf /etc/keyd/conf.d/10-drevo.conf
+    sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
 else
-    echo "nessuna conferma: ROLLBACK AUTOMATICO"
-    bash "$REPO/tools/keyd_rollback.sh"
+    echo "nessuna conferma: torno alla config base (keyd resta installato)"
+    sudo rm -f /etc/keyd/conf.d/00-test.conf
+    sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
+    systemctl is-active keyd
 fi
