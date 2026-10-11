@@ -33,7 +33,6 @@ class PerKeyPage(QWidget):
                               "I tasti non elencati restano come sono."))
 
         self.view = KeyboardView()
-        self.view.setMinimumWidth(880)
         self.view.keySelected.connect(self._from_view)
         view_scroll = QScrollArea()
         view_scroll.setWidgetResizable(True)

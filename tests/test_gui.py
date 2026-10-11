@@ -132,9 +132,12 @@ with mock.patch.object(pg, "apply_profile", side_effect=fake_apply):
 assert applied["p"].name == "guitest"
 assert "ok" in profiles.status.text()
 
-# impostazioni: cambio tema persiste
+# impostazioni: cambio tema persiste, path config corretto
 settings = win.pages[4][1]
 settings.theme.setCurrentText("scuro")
 assert T.saved_mode() == "dark"
 settings.theme.setCurrentText("auto")
+infos = [c for c in settings.findChildren(type(settings.status))
+         if ".config/drevo-control" in c.text()]
+assert infos, "path config con .config visibile"
 print("gui ok")

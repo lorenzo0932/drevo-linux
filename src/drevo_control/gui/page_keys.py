@@ -90,6 +90,8 @@ class KeysPage(QWidget):
         row2.addWidget(self.macro_timeout)
         row2.addWidget(add2)
         form2.addLayout(row2)
+        form2.addWidget(hint("I ms sono i millisecondi di attesa tra un tasto "
+                            "e il successivo della sequenza."))
         form2.addWidget(self.macro_list)
         self.macro_empty = hint("")
         form2.addWidget(self.macro_empty)

@@ -32,14 +32,14 @@ class LightsPage(QWidget):
                               "L'applicazione mette in pausa l'ambilight "
                               "per il tempo della scrittura."))
 
-        layout.addWidget(section("Effetto"))
+        layout.addWidget(section("Effetto firmware"))
         form = QFormLayout()
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(10)
         self.effect = QComboBox()
         for label, _ in EFFECTS:
             self.effect.addItem(label)
-        form.addRow("Effetto:", self.effect)
+        form.addRow("Tipo:", self.effect)
 
         row = QHBoxLayout()
         self.btn_c1 = QPushButton("Colore 1")

@@ -56,6 +56,13 @@ class SettingsPage(QWidget):
         self.pause.toggled.connect(
             lambda v: self._settings.setValue("daemon/pause", bool(v)))
         form2.addWidget(self.pause)
+        self.ambilight_info = hint(
+            "Ambilight: automazione esterna che segue i colori dello schermo "
+            "(~/.local/share/myScript/GameMode/drevo_keyboard_sync.py, "
+            "servizio ambilight-keyboard.service). La pausa evita scritture "
+            "concorrenti sull'HID.")
+        self.ambilight_info.setWordWrap(True)
+        form2.addWidget(self.ambilight_info)
         coord_box = QWidget()
         coord_box.setLayout(form2)
         layout.addWidget(coord_box)
@@ -108,6 +115,23 @@ class SettingsPage(QWidget):
         self.udev_label.setText(
             "udev: " + ("installata" if os.path.isfile(dst) else
                         "non installata"))
+        installed = self._ambilight_installed()
+        for widget in (self.pause, self.ambilight_info):
+            widget.setEnabled(installed)
+        if not installed:
+            self.ambilight_info.setText(
+                "Ambilight non rilevato su questo sistema: coordinamento "
+                "non necessario.")
+
+    @staticmethod
+    def _ambilight_installed():
+        import subprocess
+
+        r = subprocess.run(
+            ["systemctl", "--user", "list-unit-files",
+             "ambilight-keyboard.service"],
+            capture_output=True, text=True)
+        return "ambilight-keyboard.service" in r.stdout
 
     def _run_priv(self, *cmd):
         if shutil.which("pkexec") and (os.environ.get("DISPLAY")

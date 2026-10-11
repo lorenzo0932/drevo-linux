@@ -43,8 +43,10 @@ QPushButton[selected="true"] {{ border: 2px solid {p['accent']}; }}
 QPushButton:disabled {{ color: {p['muted']}; }}
 QComboBox {{ background: {p['card']}; color: {p['fg']};
     border: 1px solid {p['border']}; border-radius: 8px;
-    padding: 6px 28px 6px 10px; }}
-QComboBox::drop-down {{ border: none; width: 22px; }}
+    padding: 6px 28px 6px 10px; min-height: 20px; }}
+QComboBox::drop-down {{ border: none; border-left: 1px solid {p['border']};
+    background: {p['nav']}; width: 30px;
+    border-top-right-radius: 8px; border-bottom-right-radius: 8px; }}
 QComboBox::down-arrow {{ width: 12px; height: 12px; }}
 QSpinBox, QLineEdit, QTextEdit, QListWidget {{
     background: {p['card']}; color: {p['fg']};

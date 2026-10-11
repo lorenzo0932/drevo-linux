@@ -46,10 +46,13 @@ NAV = [
 class KeyboardView(QWidget):
     keySelected = Signal(str)
 
+    BASE_WIDTH = 1060
+
     def __init__(self):
         super().__init__()
         self.caps = {}
         self.selected = None
+        self.setMinimumWidth(480)
         outer = QHBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(12)
@@ -77,9 +80,6 @@ class KeyboardView(QWidget):
                 layout.addWidget(spacer, int(units * 10))
                 continue
             btn = QPushButton(DISPLAY.get(name, name.upper()))
-            font = btn.font()
-            font.setPointSize(8)
-            btn.setFont(font)
             btn.setFixedHeight(38)
             btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             btn.setProperty("keyname", name)
@@ -91,7 +91,21 @@ class KeyboardView(QWidget):
                     lambda _=False, n=name: self.select(n))
             layout.addWidget(btn, max(1, int(units * 10)))
             self.caps[name] = btn
+        self._rescale()
         return layout
+
+    def _rescale(self):
+        """Font e altezza proporzionali alla larghezza disponibile."""
+        scale = max(0.62, min(1.15, self.width() / self.BASE_WIDTH))
+        for btn in self.caps.values():
+            font = btn.font()
+            font.setPointSizeF(max(7.0, 9.0 * scale))
+            btn.setFont(font)
+            btn.setFixedHeight(max(30, int(40 * scale)))
+
+    def resizeEvent(self, event):  # noqa: N802 (API Qt)
+        super().resizeEvent(event)
+        self._rescale()
 
     def select(self, name):
         self.selected = name
