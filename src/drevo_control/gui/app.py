@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (QHBoxLayout, QListWidget, QMainWindow,
                                QStackedWidget, QWidget)
 
 from drevo_control.gui.page_lights import LightsPage
+from drevo_control.gui.page_perkey import PerKeyPage
 
 
 class MainWindow(QMainWindow):
@@ -31,7 +32,7 @@ class MainWindow(QMainWindow):
         self.stack = QStackedWidget()
 
         self.pages = [("Luci", LightsPage()),
-                      ("Per-key", QWidget()),
+                      ("Per-key", PerKeyPage()),
                       ("Tasti e Macro", QWidget()),
                       ("Profili", QWidget())]
         for label, page in self.pages:
