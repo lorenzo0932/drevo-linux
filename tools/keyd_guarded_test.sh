@@ -7,8 +7,9 @@
 # Pensato per il caso peggiore (tastiera muta): non serve digitare nulla.
 set -u
 
-CONF="${1:?uso: $0 <file.conf> [secondi]}"
+CONF="${1:?uso: $0 <file.conf> [secondi] [descrizione test]}"
 TIMEOUT="${2:-45}"
+WHAT="${3:-Prova la modifica.}"
 MAIN_CONF="/etc/keyd/keyd.conf"
 BACKUP="/tmp/opencode/keyd-base.conf"
 
@@ -19,7 +20,7 @@ sudo systemctl reload keyd 2>/dev/null || sudo systemctl restart keyd
 sleep 1
 
 if timeout "$TIMEOUT" zenity --question \
-    --text="Prova la modifica (es. BLOC MAIUSC ora e' ESC).\n\nOK = funziona, tengo la modifica.\nScadenza tra ${TIMEOUT}s = ritorno alla config base." \
+    --text="TEST: ${WHAT}\n\nOK = funziona, tengo la modifica.\nScadenza tra ${TIMEOUT}s = ritorno alla config base." \
     --ok-label="Funziona, tieni" --cancel-label="Torna alla base" 2>/dev/null; then
     echo "confermato via mouse: tengo la nuova config (gia' in keyd.conf)"
 else
