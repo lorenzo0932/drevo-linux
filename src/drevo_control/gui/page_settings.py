@@ -5,8 +5,11 @@ import importlib.resources
 import os
 import shutil
 import subprocess
+import tempfile
+import tempfile
 
-from PySide6.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGroupBox,
+from PySide6.QtCore import QSettings
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QFormLayout,
                                QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
                                QWidget)
 
@@ -51,7 +54,6 @@ class SettingsPage(QWidget):
         form2.setSpacing(8)
         self.pause = QCheckBox("Metti in pausa l'ambilight durante le "
                               "scritture (consigliato)")
-        from PySide6.QtCore import QSettings
         self._settings = QSettings("drevo-control", "drevo-control")
         paused = self._settings.value("daemon/pause", True)
         self.pause.setChecked(paused not in (False, "false", 0, "0"))
@@ -133,8 +135,6 @@ class SettingsPage(QWidget):
 
     @staticmethod
     def _ambilight_installed():
-        import subprocess
-
         r = subprocess.run(
             ["systemctl", "--user", "list-unit-files",
              "ambilight-keyboard.service"],
@@ -151,8 +151,6 @@ class SettingsPage(QWidget):
                               timeout=300)
 
     def _install_keyd(self):
-        import importlib.resources
-
         self.status.setText("Installazione keyd dai sorgenti in corso…")
         with importlib.resources.path("drevo_control.data",
                                       "keyd_install_src.sh") as script:
@@ -164,16 +162,25 @@ class SettingsPage(QWidget):
     def _remove_keyd(self):
         self.status.setText("Rimozione keyd in corso…")
         r = self._run_priv("bash", "-c",
-                           "systemctl stop keyd; systemctl disable keyd; "
-                           "dnf remove -y keyd; rm -rf /etc/keyd")
+                           "systemctl stop keyd 2>/dev/null; "
+                           "systemctl disable keyd 2>/dev/null; "
+                           "if rpm -q keyd >/dev/null 2>&1; then "
+                           "dnf remove -y keyd; fi; "
+                           "for src in /usr/local/src/keyd "
+                           "$HOME/.local/src/keyd /root/.local/src/keyd; do "
+                           "if [ -f \"$src/Makefile\" ]; then "
+                           "make -C \"$src\" uninstall || true; break; fi; "
+                           "done; "
+                           "rm -f /usr/local/bin/keyd "
+                           "/usr/local/bin/keyd-application-mapper "
+                           "/usr/local/lib/systemd/system/keyd.service "
+                           "/usr/lib/systemd/system/keyd.service; "
+                           "rm -rf /etc/keyd; systemctl daemon-reload")
         self.status.setText("keyd rimosso." if r.returncode == 0
                             else f"Errore: {(r.stderr or '')[:200]}")
         self.refresh_system()
 
     def _install_udev(self):
-        import importlib.resources
-        import tempfile
-
         data = importlib.resources.read_text(
             "drevo_control.data", "77-drevo-control.rules")
         with tempfile.NamedTemporaryFile("w", suffix=".rules",

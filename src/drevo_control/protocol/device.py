@@ -3,6 +3,8 @@
 
 from contextlib import contextmanager
 
+import hid
+
 from drevo_control import CONTROL_INTERFACE, PRODUCT_ID, VENDOR_ID
 from drevo_control.lock import hid_writer_lock
 
@@ -10,8 +12,6 @@ from drevo_control.lock import hid_writer_lock
 @contextmanager
 def open_control():
     """Apre iface 1/usage 0 in scrittura. Solleva RuntimeError se assente."""
-    import hid
-
     path = None
     for itf in hid.enumerate(VENDOR_ID, PRODUCT_ID):
         if (itf.get("interface_number") == CONTROL_INTERFACE

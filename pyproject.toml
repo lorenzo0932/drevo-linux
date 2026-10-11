@@ -7,7 +7,7 @@ name = "drevo-control"
 version = "0.0.1"
 description = "Controllo Linux con GUI per tastiere Drevo Winbond (0416:a0f8)"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10"  # testato su 3.14
 license = { text = "GPL-3.0-or-later" }
 dependencies = ["hidapi"]
 

@@ -1,14 +1,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Tasti e Macro: remap, macro, game-mode -> config keyd."""
 
-from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QGroupBox,
-                               QHBoxLayout, QLabel, QLineEdit, QListWidget,
-                               QPushButton, QSpinBox, QTextEdit, QVBoxLayout,
-                               QWidget)
+import subprocess
+import tempfile
+
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QHBoxLayout,
+                               QLabel, QLineEdit, QListWidget, QPushButton,
+                               QSpinBox, QTextEdit, QVBoxLayout, QWidget)
 
 from drevo_control.gui.widgets import hint, note, padded, section, \
     toggle_empty
-from drevo_control.oslayer import RemapProfile
+from drevo_control.oslayer import RemapProfile, render_keyd
 from drevo_control.oslayer.apply import install_keyd_conf, keyd_active
 
 KEYD_KEYS = ([chr(c) for c in range(ord("a"), ord("z") + 1)]
@@ -194,7 +196,6 @@ class KeysPage(QWidget):
 
     # -- keyd ----------------------------------------------------------
     def _preview(self):
-        from drevo_control.oslayer import render_keyd
         dlg = QDialog(self)
         dlg.setWindowTitle("Anteprima keyd.conf")
         dlg.resize(520, 380)
@@ -206,8 +207,6 @@ class KeysPage(QWidget):
         dlg.exec()
 
     def install(self):
-        import subprocess
-
         if not keyd_active():
             note(self.status, "keyd non attivo: installalo da Impostazioni.",
                  "error")
@@ -220,9 +219,6 @@ class KeysPage(QWidget):
         self.restore_btn.setEnabled(ok and self._backup_conf is not None)
 
     def _restore(self):
-        import subprocess
-        import tempfile
-
         if self._backup_conf is None:
             return
         with tempfile.NamedTemporaryFile("w", suffix=".conf",

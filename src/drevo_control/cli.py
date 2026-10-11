@@ -2,11 +2,14 @@
 """CLI: drevo-control <effect|key|kbd> ..."""
 
 import argparse
+import sys
 
+from drevo_control.lock import hid_writer_lock
+from drevo_control.oslayer.apply import apply_profile
+from drevo_control.oslayer.profiles import load_profile
 from drevo_control.protocol import board as B
 from drevo_control.protocol import commands as C
 from drevo_control.protocol.device import open_control, write_packet
-from drevo_control.lock import hid_writer_lock
 
 DIRECTIONS = {"e": 0, "w": 1, "s": 2, "n": 3}
 
@@ -45,11 +48,6 @@ def _cmd_kbd(args):
 
 
 def _cmd_profile_apply(args):
-    import sys
-
-    from drevo_control.oslayer.apply import apply_profile
-    from drevo_control.oslayer.profiles import load_profile
-
     profile = load_profile(args.name)
     try:
         ok, msg = apply_profile(profile)

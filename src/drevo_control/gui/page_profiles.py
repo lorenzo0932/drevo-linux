@@ -1,9 +1,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Profili: salva/applica/elimina profili luci+tasti."""
 
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QListWidget,
-                               QPushButton, QVBoxLayout, QWidget)
+import os
 
+from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QListWidget,
+                               QMessageBox, QPushButton, QVBoxLayout,
+                               QWidget)
+
+from drevo_control.gui.settings_state import pause_enabled
 from drevo_control.gui.widgets import hint, note, padded
 from drevo_control.oslayer import profiles as store
 from drevo_control.oslayer.apply import apply_profile
@@ -84,7 +88,8 @@ class ProfilesPage(QWidget):
         if not items:
             return
         try:
-            ok, msg = apply_profile(store.load_profile(items[0].text()))
+            ok, msg = apply_profile(store.load_profile(items[0].text()),
+                                    pause=pause_enabled())
         except RuntimeError as e:
             note(self.status, f"Errore: {e}", "error")
             return
@@ -92,9 +97,6 @@ class ProfilesPage(QWidget):
              "ok" if ok else "error")
 
     def delete_selected(self):
-        import os
-
-        from PySide6.QtWidgets import QMessageBox
         items = self.plist.selectedItems()
         if not items:
             return

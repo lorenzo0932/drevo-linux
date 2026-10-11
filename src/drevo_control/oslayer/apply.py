@@ -4,6 +4,7 @@
 import os
 import shutil
 import subprocess
+import tempfile
 
 from drevo_control.oslayer import RemapProfile, render_keyd
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
@@ -36,11 +37,8 @@ def _escalated(*args):
     return r
 
 
-def apply_lighting(lighting, pause=None):
-    """Scrive il pacchetto luci (pausa daemon salvo impostazione)."""
-    from drevo_control.oslayer.daemon import pause_enabled
-    if pause is None:
-        pause = pause_enabled()
+def apply_lighting(lighting, pause=True):
+    """Scrive il pacchetto luci (pausa daemon salvo impostazione GUI)."""
     if pause:
         pause_daemon()
     try:
@@ -55,8 +53,6 @@ def install_keyd_conf(profile):
 
     keyd non supporta reload: serve restart.
     """
-    import tempfile
-
     with tempfile.NamedTemporaryFile("w", suffix=".conf",
                                      delete=False) as f:
         f.write(render_keyd(profile))

@@ -9,6 +9,7 @@ passare da qui o restare in pausa durante la configurazione.
 
 import fcntl
 import os
+import time
 from contextlib import contextmanager
 
 LOCK_PATH = "/tmp/drevo_hid_writer.lock"
@@ -17,8 +18,6 @@ LOCK_PATH = "/tmp/drevo_hid_writer.lock"
 @contextmanager
 def hid_writer_lock(timeout=10.0):
     """Yield a True se il lock e' acquisito, altrimenti False (non blocca)."""
-    import time
-
     fd = os.open(LOCK_PATH, os.O_CREAT | os.O_RDWR, 0o644)
     deadline = time.monotonic() + timeout
     try:
