@@ -1,0 +1,4 @@
+# Tastiere Drevo Winbond 0416:a0f8 — accesso userspace all'HID di controllo.
+# Installare in /etc/udev/rules.d/ poi: udevadm control --reload-rules && udevadm trigger
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="a0f8", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="a0f8", TAG+="uaccess"
