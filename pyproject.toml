@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drevo-control"
+version = "0.0.1"
+description = "Controllo Linux con GUI per tastiere Drevo Winbond (0416:a0f8)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
+dependencies = ["hidapi"]
+
+[project.optional-dependencies]
+gui = ["PySide6>=6.6"]
+
+[project.scripts]
+drevo-control = "drevo_control.cli:main"
+drevo-control-gui = "drevo_control.gui.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+drevo_control = ["gui/*.qss", "data/*.rules", "data/*.sh", "data/*.svg"]

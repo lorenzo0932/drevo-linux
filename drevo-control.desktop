@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Drevo Control
+Comment=Controllo RGB, tasti e profili per tastiere Drevo Winbond
+Exec=drevo-control-gui
+Icon=input-keyboard
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=drevo;keyboard;rgb;macro;
