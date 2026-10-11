@@ -16,6 +16,24 @@ rm -rf "$DEST"
 rm -f "$HOME/.local/bin/drevo-control" "$HOME/.local/bin/drevo-control-gui"
 rm -f "$HOME/.local/share/applications/drevo-control.desktop"
 update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+if grep -q 'drevo-control PATH' "$HOME/.bashrc" 2>/dev/null; then
+    python3 - "$HOME/.bashrc" <<'EOF'
+import sys
+p = sys.argv[1]
+lines = open(p).read().split('\n')
+keep = []
+i = 0
+while i < len(lines):
+    if (lines[i] == '# drevo-control PATH'
+            and i + 1 < len(lines)
+            and lines[i + 1] == 'export PATH="$HOME/.local/bin:$PATH"'):
+        i += 2
+        continue
+    keep.append(lines[i])
+    i += 1
+open(p, 'w').write('\n'.join(keep))
+EOF
+fi
 
 if [ -f /etc/udev/rules.d/77-drevo-control.rules ]; then
     sudo rm -f /etc/udev/rules.d/77-drevo-control.rules

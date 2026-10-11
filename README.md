@@ -96,7 +96,7 @@ scelto e' pacchetto pip + installer. Dettagli dipendenze sotto.
 
 ## Dipendenze
 
-Requisiti: Python 3.10+. L'accesso HID usa `hidapi` (le wheel `hid`/`PySide6`
+Requisiti: Python 3.10+ (testato su 3.14). L'accesso HID usa `hidapi` (le wheel `hid`/`PySide6`
 su pip includono i binari; se `import hid` fallisce, installa la libreria
 di sistema, es. `hidapi`).
 
