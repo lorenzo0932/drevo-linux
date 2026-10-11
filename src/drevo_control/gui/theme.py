@@ -111,4 +111,25 @@ def resolve(mode=None):
 
 
 def apply_theme(window, mode=None):
-    window.setStyleSheet(build_qss(DARK if resolve(mode) == "dark" else LIGHT))
+    from PySide6.QtGui import QColor, QPalette
+
+    pal = DARK if resolve(mode) == "dark" else LIGHT
+    window.setStyleSheet(build_qss(pal))
+    palette = window.palette()
+    palette.setColor(QPalette.Window, QColor(pal["bg"]))
+    palette.setColor(QPalette.Base, QColor(pal["card"]))
+    palette.setColor(QPalette.AlternateBase, QColor(pal["nav"]))
+    palette.setColor(QPalette.Text, QColor(pal["fg"]))
+    palette.setColor(QPalette.WindowText, QColor(pal["fg"]))
+    palette.setColor(QPalette.Button, QColor(pal["card"]))
+    palette.setColor(QPalette.ButtonText, QColor(pal["fg"]))
+    palette.setColor(QPalette.Highlight, QColor(pal["accent"]))
+    palette.setColor(QPalette.HighlightedText, QColor("white"))
+    window.setPalette(palette)
+    try:
+        from PySide6.QtWidgets import QApplication
+        inst = QApplication.instance()
+        if inst is not None:
+            inst.setPalette(palette)
+    except Exception:
+        pass

@@ -18,11 +18,12 @@ if len(sys.argv) > 2:
     from drevo_control.gui import theme as T
     T.save_mode(sys.argv[2])
 win = MainWindow()
+win.resize(1080, 700)
 win.show()
 for row in range(win.nav.count()):
     win.nav.setCurrentRow(row)
     label = win.nav.item(row).text().replace(" ", "_")
-    shot = win.stack.currentWidget().grab()
+    shot = win.grab()
     path = os.path.join(OUT, f"{row:02d}_{label}.png")
     shot.save(path)
     print("salvato", path)

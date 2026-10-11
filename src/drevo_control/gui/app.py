@@ -63,6 +63,7 @@ class MainWindow(QMainWindow):
                       ("Impostazioni", settings)]
         for label, page in self.pages:
             page.setObjectName("page")
+            page.setAutoFillBackground(True)
             scroll = QScrollArea()
             scroll.setWidgetResizable(True)
             scroll.setFrameShape(QScrollArea.NoFrame)
