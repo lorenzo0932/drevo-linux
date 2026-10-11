@@ -1,5 +1,18 @@
 # Architettura
 
+```mermaid
+flowchart TB
+    GUI["GUI Qt (Luci · Per-key · Tasti/Macro · Profili · Impostazioni)"]
+    CORE["core: protocol/ (pacchetti HID) · oslayer/ (keyd, profili)"]
+    LOCK["lock single-writer"]
+    DEV["tastiera 0416:a0f8 (usbhid)"]
+    KEYD["keyd (evdev)"]
+    AMB["ambilight MQTT (esterno)"]
+    GUI --> CORE --> LOCK --> DEV
+    CORE --> KEYD
+    CORE -. "pausa attorno alle scritture" .-> AMB
+```
+
 ```
 ┌──────────── GUI Qt (PySide6) ────────────┐
 │ Luci │ Per-key │ Tasti/Macro │ Profili   │ Impostazioni

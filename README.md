@@ -1,10 +1,21 @@
 # drevo-linux
 
+![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)
+![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
+![Platform: Linux](https://img.shields.io/badge/Platform-Linux-blue.svg)
+
 Controllo Linux con GUI per tastiere Drevo su controller Winbond
 (`0416:a0f8` — Tyrfing V2 / Calibur V2 TE), a parita' funzionale di
 Drevo Power Console per le funzioni device-local.
 
 Stato: funzionante e verificato su hardware (0416:a0f8).
+
+## Indice
+
+- [Funzionalità](#funzionalità) · [Installazione](#installazione-un-comando)
+- [Dipendenze](#dipendenze) · [Layout](#layout) · [Licenza](#licenza)
+- Documentazione tecnica: [docs/](docs/) (architettura, protocollo,
+  GUI, packaging, test, reverse engineering, terze parti)
 
 ## Scope
 
@@ -100,6 +111,17 @@ cp drevo-control.desktop ~/.local/share/applications/
 keyd (remap/macro/game-mode) si installa da Impostazioni, dai sorgenti
 senza package manager (serve gcc/make/git). Il firmware si aggiorna
 solo da Windows.
+
+## Riconoscimenti
+
+Si appoggia a [keyd](https://github.com/rvaiya/keyd),
+[hidapi](https://github.com/libusb/hidapi), [Qt for Python](https://wiki.qt.io/Qt_for_Python)
+e al lavoro di reverse del protocollo di [dtv2](https://github.com/cobacdavid/dtv2)
+(integrazioni, riferimenti e licenze in [docs/third-party.md](docs/third-party.md)).
+
+## Licenza
+
+GPL-3.0-or-later — vedi [LICENSE](LICENSE).
 
 ## Layout
 

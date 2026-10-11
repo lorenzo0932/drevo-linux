@@ -14,6 +14,7 @@ i file coinvolti e come verificarlo.
 | [packaging](packaging.md) | Distribuzione: pip, installer, udev, desktop |
 | [testing](testing.md) | Strategia di test e sicurezza hardware |
 | [reverse-engineering](reverse-engineering.md) | Metodo e confini legali |
+| [third-party](third-party.md) | Progetti integrati, riferimenti, licenze |
 | [baseline](baseline.md) | Rilievo hardware iniziale |
 | [keyd-setup](keyd-setup.md) | Stato live di keyd |
 | [fallback-keyd](fallback-keyd.md) | Snapshot e rollback pre-keyd |
