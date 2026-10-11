@@ -1,0 +1,26 @@
+# .gitignore — drevo-linux
+# Piani e artefatti AI: mai committati (regola repo)
+plan/
+.opencode/
+bundle/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Qt / AppImage
+*.user
+*.pro.user
+*.AppImage
+
+# Editor
+.vscode/
+.idea/
+*~
