@@ -92,13 +92,16 @@ class SettingsPage(QWidget):
         udev_row.addWidget(self.udev_label, 1)
         udev_row.addWidget(udev_btn)
         form3.addLayout(udev_row)
+        form3.addWidget(hint("La regola udev permette all'app di parlare "
+                             "con la tastiera senza permessi di root."))
         sys_box = QWidget()
         sys_box.setLayout(form3)
         layout.addWidget(sys_box)
         self.refresh_system()
 
         info = QLabel(f"drevo-control {__version__} — GPL-3.0-or-later\n"
-                      f"config: {os.path.expanduser('~/.config/drevo-control')}")
+                      "profili salvati nella cartella di configurazione "
+                      "dell'utente")
         info.setObjectName("hint")
         layout.addWidget(info)
         layout.addWidget(self.status)

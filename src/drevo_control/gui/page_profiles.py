@@ -13,8 +13,7 @@ class ProfilesPage(QWidget):
         super().__init__()
         self.lights = None
         self.keys = None
-        self.status = QLabel("Le luci restano finché l'ambilight "
-                             "non pubblica un nuovo colore.")
+        self.status = QLabel("I profili applicano luci e tasti insieme.")
         self.status.setObjectName("hint")
 
         layout = padded(QVBoxLayout(self))

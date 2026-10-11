@@ -80,9 +80,8 @@ class MainWindow(QMainWindow):
         bar = QStatusBar()
         self.setStatusBar(bar)
         self.dot_device = QLabel()
-        self.dot_daemon = QLabel()
         self.dot_keyd = QLabel()
-        for dot in (self.dot_device, self.dot_daemon, self.dot_keyd):
+        for dot in (self.dot_device, self.dot_keyd):
             dot.setContentsMargins(12, 0, 0, 0)
             bar.addPermanentWidget(dot)
         self.refresh_status()
@@ -92,13 +91,10 @@ class MainWindow(QMainWindow):
 
     def refresh_status(self):
         dev = _device_present()
-        dam = _is_active("ambilight-keyboard.service", user=True)
         keyd = _is_active("keyd.service")
         green, gray = "#26a269", "#9a9996"
         self.dot_device.setText(
             f"<font color='{green if dev else gray}'>●</font> Tastiera")
-        self.dot_daemon.setText(
-            f"<font color='{green if dam else gray}'>●</font> Ambilight")
         self.dot_keyd.setText(
             f"<font color='{green if keyd else gray}'>●</font> keyd")
 

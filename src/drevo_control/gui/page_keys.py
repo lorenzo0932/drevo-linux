@@ -45,6 +45,9 @@ class KeysPage(QWidget):
 
         self.remap_list = QListWidget()
         layout.addWidget(section("Rimappature"))
+        layout.addWidget(hint("Scambia il comportamento dei tasti: il primo "
+                              "si comporta come il secondo "
+                              "(es. BLOC MAIUSC diventa ESC)."))
         form = QVBoxLayout()
         form.setContentsMargins(0, 4, 0, 0)
         form.setSpacing(8)
@@ -72,6 +75,7 @@ class KeysPage(QWidget):
 
         self.macro_list = QListWidget()
         layout.addWidget(section("Macro"))
+        layout.addWidget(hint("Un tasto che digita una sequenza da solo."))
         form2 = QVBoxLayout()
         form2.setContentsMargins(0, 4, 0, 0)
         form2.setSpacing(8)
@@ -105,6 +109,8 @@ class KeysPage(QWidget):
         self._macros = {}
 
         layout.addWidget(section("Game mode"))
+        layout.addWidget(hint("Mentre giochi, i tasti Win vengono ignorati. "
+                              "Si entra e si esce col tasto interruttore."))
         form3 = QHBoxLayout()
         form3.setContentsMargins(0, 4, 0, 0)
         form3.setSpacing(8)
@@ -214,13 +220,14 @@ class KeysPage(QWidget):
 
     def _restore(self):
         import subprocess
+        import tempfile
 
         if self._backup_conf is None:
             return
-        with open("/tmp/opencode/keyd-restore.conf", "w") as f:
+        with tempfile.NamedTemporaryFile("w", suffix=".conf",
+                                         delete=False) as f:
             f.write(self._backup_conf)
-        subprocess.run(["sudo", "-n", "install", "-m", "644",
-                        "/tmp/opencode/keyd-restore.conf",
+        subprocess.run(["sudo", "-n", "install", "-m", "644", f.name,
                         "/etc/keyd/keyd.conf"])
         subprocess.run(["sudo", "-n", "systemctl", "restart", "keyd"])
         note(self.status, "Config precedente ripristinata.", "ok")

@@ -10,12 +10,18 @@ sudo systemctl disable keyd 2>/dev/null || true
 echo '[2/4] rimozione keyd (pacchetto o sorgenti)'
 if rpm -q keyd >/dev/null 2>&1; then
     sudo dnf remove -y keyd
-elif [ -x /usr/local/bin/keyd ] || [ -x /usr/bin/keyd ]; then
-    if [ -f "$HOME/.local/src/keyd/Makefile" ]; then
-        sudo make -C "$HOME/.local/src/keyd" uninstall || true
-    fi
+elif [ -x /usr/local/bin/keyd ]; then
+    for src in /usr/local/src/keyd "$HOME/.local/src/keyd" \
+               /root/.local/src/keyd; do
+        if [ -f "$src/Makefile" ]; then
+            sudo make -C "$src" uninstall || true
+            break
+        fi
+    done
     sudo rm -f /usr/local/bin/keyd /usr/local/bin/keyd-application-mapper \
-        /usr/lib/systemd/system/keyd.service /etc/systemd/system/*keyd*
+        /usr/local/lib/systemd/system/keyd.service \
+        /usr/lib/systemd/system/keyd.service \
+        /etc/systemd/system/*keyd* /etc/systemd/user/*keyd*
     sudo systemctl daemon-reload
 else
     echo 'keyd non installato, salto'

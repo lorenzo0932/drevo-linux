@@ -1,13 +1,15 @@
-# keyd — setup live (2026-10-11)
+# keyd — setup live
 
-- Sorgente: COPR `fmonteghetti/keyd` (Fedora non lo pacchettizza),
-  versione `2.3.1-rc`.
-- Config attiva: `/etc/keyd/keyd.conf` generata dal nostro renderer,
-  profilo `test4` (capslock=esc + game-mode su F12), verificato OK
-  il 2026-10-11 via `profile apply`.
-- Nota: keyd non supporta `reload` → il codice usa restart in fallback.
-- Test hardware passati: macro F9, toggle game-mode, keymap enter=rosso,
-  apply unificato luci+tasti con pausa daemon.
-- Procedura per ogni cambio: `tools/keyd_guarded_test.sh` con revert
-  automatico a `tools/keyd_rollback.sh` (snapshot in
-  `docs/fallback-keyd.md`).
+- Installazione **dai sorgenti**, senza package manager:
+  `src/drevo_control/data/keyd_install_src.sh` (anche da Impostazioni).
+  Richiede solo gcc/make/git. Sorgenti in `/usr/local/src/keyd`
+  (quelli storici dell'installazione manuale stanno in
+  `/root/.local/src/keyd`, il rollback copre entrambi).
+- Stato 2026-10-11: keyd **v2.6.0** attivo da sorgenti,
+  `/etc/keyd/keyd.conf` = profilo vuoto `bozza` (solo match `0416:a0f8`).
+- Procedura per ogni cambio: `tools/keyd_guarded_test.sh` con ritorno
+  automatico alla base; rimozione completa con `tools/keyd_rollback.sh`
+  (snapshot in `docs/fallback-keyd.md`).
+- Nota versioni: i test remap/macro/game-mode sono passati su 2.3.1-rc
+  (COPR); la 2.6.0 accetta la stessa sintassi (`toggle()` presente dalla
+  2.4). Riverifica con l'utente al primo remap reale su 2.6.0.

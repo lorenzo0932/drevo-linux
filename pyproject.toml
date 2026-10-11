@@ -22,4 +22,4 @@ drevo-control-gui = "drevo_control.gui.app:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-drevo_control = ["gui/*.qss", "data/*.rules", "data/*.sh"]
+drevo_control = ["gui/*.qss", "data/*.rules", "data/*.sh", "data/*.svg"]

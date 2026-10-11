@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Installa keyd dai sorgenti in locale (~/.local/src/keyd).
+# Installa keyd dai sorgenti in locale (/usr/local/src/keyd).
 # Niente package manager: richiede solo gcc/make/git (verificati prima).
 # Uso: keyd_install_src.sh [tag]  (default: ultimo tag stabile remoto)
 set -u
 
-SRC="$HOME/.local/src/keyd"
+SRC="/usr/local/src/keyd"
 REPO_URL="https://github.com/rvaiya/keyd"
 
 for t in gcc make git; do

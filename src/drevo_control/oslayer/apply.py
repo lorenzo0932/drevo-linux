@@ -54,10 +54,14 @@ def install_keyd_conf(profile):
 
     keyd non supporta reload: serve restart.
     """
-    tmp = "/tmp/opencode/keyd-profile.conf"
-    with open(tmp, "w") as f:
+    import tempfile
+
+    with tempfile.NamedTemporaryFile("w", suffix=".conf",
+                                     delete=False) as f:
         f.write(render_keyd(profile))
+    tmp = f.name
     r = _escalated("install", "-m", "644", tmp, "/etc/keyd/keyd.conf")
+    os.unlink(tmp)
     if r.returncode != 0:
         return False, (r.stderr or "install fallito").strip()
     r = _escalated("systemctl", "restart", "keyd")

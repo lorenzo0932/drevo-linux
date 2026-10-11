@@ -19,6 +19,12 @@ DARK = {
 
 
 def build_qss(p):
+    try:
+        import importlib.resources
+        chevron = importlib.resources.files("drevo_control.data").joinpath(
+            "chevron-down.svg")
+    except (ImportError, ModuleNotFoundError):
+        chevron = "chevron-down.svg"
     return f"""
 QMainWindow, QWidget#page {{ background: {p['bg']}; color: {p['fg']}; }}
 QListWidget#nav {{ background: {p['nav']}; border: none; font-size: 15px; }}
@@ -48,7 +54,7 @@ QComboBox {{ background: {p['card']}; color: {p['fg']};
 QComboBox::drop-down {{ border: none; border-left: 1px solid {p['border']};
     background: {p['nav']}; width: 30px;
     border-top-right-radius: 8px; border-bottom-right-radius: 8px; }}
-QComboBox::down-arrow {{ width: 12px; height: 12px; }}
+QComboBox::down-arrow {{ image: url({chevron}); width: 12px; height: 12px; }}
 QSpinBox, QLineEdit, QTextEdit, QListWidget {{
     background: {p['card']}; color: {p['fg']};
     border: 1px solid {p['border']}; border-radius: 8px; padding: 6px 10px; }}

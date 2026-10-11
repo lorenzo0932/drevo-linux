@@ -28,9 +28,8 @@ class LightsPage(QWidget):
         title = QLabel("Luci")
         title.setObjectName("title")
         layout.addWidget(title)
-        layout.addWidget(hint("Effetto firmware e parametri. "
-                              "L'applicazione mette in pausa l'ambilight "
-                              "per il tempo della scrittura."))
+        layout.addWidget(hint("Effetto firmware e parametri: la scrittura "
+                              "e' atomica e non disturba la digitazione."))
 
         layout.addWidget(section("Effetto firmware"))
         form = QFormLayout()

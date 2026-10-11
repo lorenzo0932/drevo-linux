@@ -39,7 +39,8 @@ cp drevo-control.desktop ~/.local/share/applications/
 ```
 
 keyd (remap/macro/game-mode) si installa da Impostazioni, dai sorgenti
-senza package manager. Il firmware si aggiorna solo da Windows.
+senza package manager (serve gcc/make/git). Il firmware si aggiorna
+solo da Windows.
 
 ## Layout
 
