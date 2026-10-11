@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QGroupBox,
                                QPushButton, QSpinBox, QTextEdit, QVBoxLayout,
                                QWidget)
 
-from drevo_control.gui.widgets import hint, note, toggle_empty
+from drevo_control.gui.widgets import hint, note, padded, toggle_empty
 from drevo_control.oslayer import RemapProfile
 from drevo_control.oslayer.apply import install_keyd_conf, keyd_active
 
@@ -35,7 +35,7 @@ class KeysPage(QWidget):
         self.status.setObjectName("hint")
         self._backup_conf = None
 
-        layout = QVBoxLayout(self)
+        layout = padded(QVBoxLayout(self))
         title = QLabel("Tasti e Macro")
         title.setObjectName("title")
         layout.addWidget(title)
@@ -44,7 +44,7 @@ class KeysPage(QWidget):
 
         self.remap_list = QListWidget()
         box = QGroupBox("Rimappature")
-        form = QVBoxLayout(box)
+        form = padded(QVBoxLayout(box))
         row = QHBoxLayout()
         self.remap_src = _key_combo()
         self.remap_dst = _key_combo()
@@ -67,7 +67,7 @@ class KeysPage(QWidget):
 
         self.macro_list = QListWidget()
         box2 = QGroupBox("Macro")
-        form2 = QVBoxLayout(box2)
+        form2 = padded(QVBoxLayout(box2))
         row2 = QHBoxLayout()
         self.macro_key = _key_combo()
         self.macro_seq = QLineEdit()
@@ -94,7 +94,7 @@ class KeysPage(QWidget):
         self._macros = {}
 
         box3 = QGroupBox("Game mode")
-        form3 = QHBoxLayout(box3)
+        form3 = padded(QHBoxLayout(box3))
         self.game_on = QCheckBox("Attiva game mode (Win disabilitati)")
         self.game_toggle = _key_combo()
         self.game_toggle.setCurrentText("f12")

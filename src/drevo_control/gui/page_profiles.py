@@ -3,7 +3,7 @@
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QListWidget,
                                QPushButton, QVBoxLayout, QWidget)
 
-from drevo_control.gui.widgets import hint, note
+from drevo_control.gui.widgets import hint, note, padded
 from drevo_control.oslayer import profiles as store
 from drevo_control.oslayer.apply import apply_profile
 
@@ -17,7 +17,7 @@ class ProfilesPage(QWidget):
                              "non pubblica un nuovo colore.")
         self.status.setObjectName("hint")
 
-        layout = QVBoxLayout(self)
+        layout = padded(QVBoxLayout(self))
         title = QLabel("Profili")
         title.setObjectName("title")
         layout.addWidget(title)

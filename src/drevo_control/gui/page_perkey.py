@@ -1,11 +1,13 @@
 """Pagina Per-key: assegna colori ai singoli tasti + tinta unita board."""
 
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QColorDialog, QComboBox, QGroupBox, QHBoxLayout,
-                               QLabel, QListWidget, QPushButton, QVBoxLayout,
-                               QWidget)
+                               QLabel, QListWidget, QPushButton, QScrollArea,
+                               QVBoxLayout, QWidget)
 
-from drevo_control.gui.widgets import hint, note, toggle_empty
+from drevo_control.gui.keyboard_view import KeyboardView
+from drevo_control.gui.widgets import hint, note, padded, toggle_empty
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import board as B
 from drevo_control.protocol.commands import indiv_packet
@@ -22,15 +24,26 @@ class PerKeyPage(QWidget):
         self.status = QLabel("")
         self.status.setObjectName("hint")
 
-        layout = QVBoxLayout(self)
+        layout = padded(QVBoxLayout(self))
         title = QLabel("Per-key")
         title.setObjectName("title")
         layout.addWidget(title)
         layout.addWidget(hint("Colora singoli tasti o l'intera board. "
                               "I tasti non elencati restano come sono."))
 
+        self.view = KeyboardView()
+        self.view.setMinimumWidth(1060)
+        self.view.keySelected.connect(self._from_view)
+        view_scroll = QScrollArea()
+        view_scroll.setWidgetResizable(True)
+        view_scroll.setFrameShape(QScrollArea.NoFrame)
+        view_scroll.setVerticalScrollBarPolicy(
+            Qt.ScrollBarAlwaysOff)
+        view_scroll.setWidget(self.view)
+        layout.addWidget(view_scroll)
+
         box = QGroupBox("Assegnazioni")
-        form = QVBoxLayout(box)
+        form = padded(QVBoxLayout(box))
         row = QHBoxLayout()
         self.keysel = QComboBox()
         self.keysel.setEditable(True)
@@ -99,6 +112,9 @@ class PerKeyPage(QWidget):
         self.board_color_btn.setStyleSheet(
             f"background: {self.board_color.name()}; color: white;")
 
+    def _from_view(self, name):
+        self.keysel.setCurrentText(name)
+
     def _add(self):
         name = self.keysel.currentText().strip()
         if name not in BY_NAME:
@@ -119,7 +135,8 @@ class PerKeyPage(QWidget):
         for name, (r, g, b) in sorted(self.pending.items()):
             self.assigned.addItem(f"{name}  #{r:02x}{g:02x}{b:02x}")
         toggle_empty(self.empty_note, self.assigned,
-                     "Nessun tasto: cercalo sopra e premi Aggiungi.")
+                     "Nessun tasto: cliccane uno sopra e premi Aggiungi.")
+        self.view.paint_colors(self.pending)
 
     def _write_all(self, packets):
         from drevo_control.oslayer.daemon import pause_enabled

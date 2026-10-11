@@ -1,6 +1,13 @@
-"""Widget condivisi: hint, stati vuoti, note di stato."""
+"""Widget condivisi: hint, stati vuoti, note di stato, spaziature."""
 
 from PySide6.QtWidgets import QLabel
+
+
+def padded(layout, margin=16, spacing=10):
+    """Respiro uniforme per layout di pagina e gruppi."""
+    layout.setContentsMargins(margin, margin, margin, margin)
+    layout.setSpacing(spacing)
+    return layout
 
 
 def hint(text):

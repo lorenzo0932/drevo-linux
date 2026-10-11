@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGroupBox,
 
 from drevo_control import __version__
 from drevo_control.gui import theme as T
-from drevo_control.gui.widgets import hint
+from drevo_control.gui.widgets import hint, padded
 from drevo_control.oslayer.apply import keyd_active
 
 
@@ -21,7 +21,7 @@ class SettingsPage(QWidget):
         self.status = QLabel("")
         self.status.setObjectName("hint")
 
-        layout = QVBoxLayout(self)
+        layout = padded(QVBoxLayout(self))
         title = QLabel("Impostazioni")
         title.setObjectName("title")
         layout.addWidget(title)

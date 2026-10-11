@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (QCheckBox, QColorDialog, QComboBox,
                                QFormLayout, QGroupBox, QHBoxLayout, QLabel,
                                QPushButton, QSlider, QVBoxLayout, QWidget)
 
-from drevo_control.gui.widgets import hint, note
+from drevo_control.gui.widgets import hint, note, padded
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import commands as C
 from drevo_control.protocol.device import write_packet
@@ -24,7 +24,7 @@ class LightsPage(QWidget):
         self.status = QLabel("")
         self.status.setObjectName("hint")
 
-        layout = QVBoxLayout(self)
+        layout = padded(QVBoxLayout(self))
         title = QLabel("Luci")
         title.setObjectName("title")
         layout.addWidget(title)
@@ -34,6 +34,9 @@ class LightsPage(QWidget):
 
         box = QGroupBox("Effetto")
         form = QFormLayout(box)
+        form.setHorizontalSpacing(12)
+        form.setVerticalSpacing(10)
+        form.setContentsMargins(16, 16, 16, 16)
         self.effect = QComboBox()
         for label, _ in EFFECTS:
             self.effect.addItem(label)

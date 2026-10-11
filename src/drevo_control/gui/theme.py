@@ -37,6 +37,8 @@ QPushButton#accent {{ background: {p['accent']}; color: white; border: none;
     font-weight: 700; }}
 QPushButton#accent:hover {{ background: {p['accent_h']}; }}
 QPushButton#swatch {{ border-radius: 8px; padding: 6px 12px; }}
+QPushButton[selected="true"] {{ border: 2px solid {p['accent']}; }}
+QPushButton:disabled {{ color: {p['muted']}; }}
 QComboBox {{ background: {p['card']}; color: {p['fg']};
     border: 1px solid {p['border']}; border-radius: 8px;
     padding: 6px 28px 6px 10px; }}
