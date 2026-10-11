@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Coordinamento col daemon ambilight (stop/start attorno alle scritture)."""
 
 import subprocess

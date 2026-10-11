@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Genera UNA scrittura di riferimento sul device (per catture usbmon).
 
 Uso: capture_ref.py breath|stream|radar|key1|keyset

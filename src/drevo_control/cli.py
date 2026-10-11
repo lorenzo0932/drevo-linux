@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """CLI: drevo-control <effect|key|kbd> ..."""
 
 import argparse

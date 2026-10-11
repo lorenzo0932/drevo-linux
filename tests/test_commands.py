@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Test dei builder contro i byte catturati via usbmon (no hardware)."""
 
 from drevo_control.protocol import commands as C

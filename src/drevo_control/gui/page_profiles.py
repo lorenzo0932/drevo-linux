@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Profili: salva/applica/elimina profili luci+tasti."""
 
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QListWidget,

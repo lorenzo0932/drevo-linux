@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Costruttori di pacchetti per 0416:a0f8, da osservazione usbmon propria.
 
 Formati osservati (control OUT 32B max su iface 1, EP3):

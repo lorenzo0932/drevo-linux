@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Test oslayer: render keyd + roundtrip profili (no hardware)."""
 
 import os

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Luci: effetto firmware + parametri, scrittura sotto pausa daemon."""
 
 from PySide6.QtGui import QColor

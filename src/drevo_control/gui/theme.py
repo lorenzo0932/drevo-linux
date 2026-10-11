@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Tema chiaro/scuro con follow di sistema e override manuale."""
 
 from PySide6.QtCore import QSettings

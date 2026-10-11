@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Generazione config keyd per 0416:a0f8 (remap, macro, game-mode).
 
 keyd e' system-wide e Wayland-safe. Questo modulo genera solo testo:

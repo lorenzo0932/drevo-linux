@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Widget condivisi: hint, stati vuoti, note di stato, spaziature."""
 
 from PySide6.QtWidgets import QLabel

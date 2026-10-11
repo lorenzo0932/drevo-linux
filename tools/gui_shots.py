@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Render offscreen di ogni pagina GUI in PNG per review visiva."""
 
 import os

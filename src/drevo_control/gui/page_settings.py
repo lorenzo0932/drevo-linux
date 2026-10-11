@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Impostazioni: tema, keyd, udev, info app."""
 
 import importlib.resources

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Apply unificato luci+tasti, riusato da CLI e GUI."""
 
 import os

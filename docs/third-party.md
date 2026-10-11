@@ -1,25 +1,20 @@
-# Progetti terzi integrati e riferimenti
+# Progetti terzi: ringraziamenti e prior art
 
-## Integrati (runtime/dipendenze)
+Questo progetto sta sulle spalle di:
 
-| Progetto | Uso | Licenza |
+| Progetto | Come lo usiamo | Licenza |
 |---|---|---|
-| [keyd](https://github.com/rvaiya/keyd) (rvaiya) | remap/macro/game-mode via evdev; compilato dai sorgenti, non bundlato | MIT |
-| [hidapi](https://github.com/libusb/hidapi) (libusb) | accesso HID via binding Python `hid` | dual BSD-3-Clause / GPL (a seconda del pacchetto: wheel PyPI o `python3-hidapi`/`hidapi` di sistema) |
+| [keyd](https://github.com/rvaiya/keyd) (rvaiya) | remap/macro/game-mode via evdev; compilato dai sorgenti al momento dell'installazione | MIT |
+| [hidapi](https://github.com/libusb/hidapi) (libusb) | accesso HID via binding Python `hid` | dual BSD-3-Clause / GPL (varia col pacchetto: wheel PyPI o `python3-hidapi`/`hidapi` di sistema) |
 | [PySide6](https://wiki.qt.io/Qt_for_Python) / Qt | GUI | LGPL-3.0 (Qt: dual GPL/LGPL) |
-| [dtv2](https://github.com/cobacdavid/dtv2) (David Cobac) | automazione ambilight esistente + generatore di traffico di riferimento per le catture; **codice non copiato nel repo** | CC-BY-NC-SA |
+| [dtv2](https://github.com/cobacdavid/dtv2) (David Cobac) | prior art sul protocollo lighting + dipendenza dell'automazione ambilight esterna | CC-BY-NC-SA |
 | systemd/udev, kernel evdev/hidraw | servizi, permessi device, input | piattaforma (LGPL/GPL) |
 
-## Riferimenti (nessun codice riusato)
-
-- [Drevo Power Console](https://www.drevo.net/page/software) (Drevo):
-  software proprietario di riferimento per funzioni e flussi; osservato
-  solo come comportamento su hardware proprio, mai decompilato.
-- [dpc_linux](https://github.com/kakaZzz1/dpc_linux): clone DPC per
-  BladeMaster (`1a2c`), non compatibile col nostro `0416:a0f8`; non riusato
-  (blob `libhidkeyboard.a` senza sorgenti).
-- [OpenRGB](https://openrgb.org/): solo RGB, senza supporto V2 TE
-  (richiesta #718); non riusato.
+Altri riferimenti utili, senza codice in comune: il software proprietario
+[Drevo Power Console](https://www.drevo.net/page/software) (riferimento
+funzionale), [dpc_linux](https://github.com/kakaZzz1/dpc_linux) e
+[OpenRGB](https://openrgb.org/). Il metodo seguito e' descritto in
+[reverse-engineering](reverse-engineering.md).
 
 ## Licenza di questo progetto
 

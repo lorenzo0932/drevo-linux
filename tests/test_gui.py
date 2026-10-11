@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Test GUI offscreen: pagine, tema, chiavi, profili (no hardware)."""
 
 import os

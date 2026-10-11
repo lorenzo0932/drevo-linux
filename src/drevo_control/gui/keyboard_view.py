@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Tastiera ISO disegnata: keycap cliccabili con colore assegnato."""
 
 from PySide6.QtCore import Signal

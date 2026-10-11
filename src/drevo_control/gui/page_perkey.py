@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Per-key: assegna colori ai singoli tasti + tinta unita board."""
 
 from PySide6.QtCore import Qt

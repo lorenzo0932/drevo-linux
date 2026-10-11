@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Apertura/scrittura HID dell'interfaccia di controllo, single-writer."""
 
 from contextlib import contextmanager

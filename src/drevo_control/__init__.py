@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """drevo-control: controllo Linux per tastiere Drevo Winbond (0416:a0f8)."""
 
 __version__ = "0.0.1"

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Mappa nome -> HID usage ID per ISO-UK 87 tasti (TKL).
 
 Usage ID dallo standard USB HID (tastiera): es. `a` = 0x04. Il tasto FN

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Lock single-writer per l'HID della tastiera.
 
 Il controller Winbond va in reset-loop con scritture frequenti o

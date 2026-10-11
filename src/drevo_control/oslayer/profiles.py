@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Profili app: lighting (device) + tasti (keyd) in un JSON."""
 
 import json

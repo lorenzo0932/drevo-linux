@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Pagina Tasti e Macro: remap, macro, game-mode -> config keyd."""
 
 from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QGroupBox,

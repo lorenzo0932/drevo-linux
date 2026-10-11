@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Survey READ-ONLY della Drevo 0416:a0f8: enumera interfacce HID e legge
 i report descriptor + feature report. NON scrive nulla sul device."""
 

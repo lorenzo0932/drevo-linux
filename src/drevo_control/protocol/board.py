@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Comandi multi-tasto: per-key singolo e colorazione intera tastiera."""
 
 from drevo_control.protocol import commands as C
