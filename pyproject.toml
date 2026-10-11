@@ -14,5 +14,8 @@ dependencies = ["hidapi"]
 [project.optional-dependencies]
 gui = ["PySide6>=6.6"]
 
+[project.scripts]
+drevo-control = "drevo_control.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
