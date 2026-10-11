@@ -26,6 +26,10 @@ QListWidget#nav::item {{ padding: 10px 14px; border-radius: 8px; }}
 QListWidget#nav::item:selected {{ background: {p['sel']}; color: {p['sel_fg']}; }}
 QLabel#title {{ font-size: 22px; font-weight: 800; }}
 QLabel#hint {{ color: {p['muted']}; }}
+QLabel[kind="ok"] {{ color: #26a269; font-weight: 700; }}
+QLabel[kind="error"] {{ color: #c01c28; font-weight: 700; }}
+QStatusBar {{ background: {p['nav']}; color: {p['muted']}; }}
+QStatusBar::item {{ border: none; }}
 QPushButton {{ background: {p['card']}; color: {p['fg']};
     border: 1px solid {p['border']}; border-radius: 8px; padding: 8px 16px; }}
 QPushButton:hover {{ background: {p['nav']}; }}

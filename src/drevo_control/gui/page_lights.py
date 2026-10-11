@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (QCheckBox, QColorDialog, QComboBox,
                                QFormLayout, QGroupBox, QHBoxLayout, QLabel,
                                QPushButton, QSlider, QVBoxLayout, QWidget)
 
+from drevo_control.gui.widgets import hint, note
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import commands as C
 from drevo_control.protocol.device import write_packet
@@ -27,6 +28,9 @@ class LightsPage(QWidget):
         title = QLabel("Luci")
         title.setObjectName("title")
         layout.addWidget(title)
+        layout.addWidget(hint("Effetto firmware e parametri. "
+                              "L'applicazione mette in pausa l'ambilight "
+                              "per il tempo della scrittura."))
 
         box = QGroupBox("Effetto")
         form = QFormLayout(box)
@@ -125,4 +129,4 @@ class LightsPage(QWidget):
         finally:
             if paused:
                 resume_daemon()
-        self.status.setText("Applicato.")
+        note(self.status, "Applicato.", "ok")

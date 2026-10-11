@@ -3,6 +3,7 @@
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QListWidget,
                                QPushButton, QVBoxLayout, QWidget)
 
+from drevo_control.gui.widgets import hint, note
 from drevo_control.oslayer import profiles as store
 from drevo_control.oslayer.apply import apply_profile
 
@@ -20,6 +21,8 @@ class ProfilesPage(QWidget):
         title = QLabel("Profili")
         title.setObjectName("title")
         layout.addWidget(title)
+        layout.addWidget(hint("Salva e riapplica configurazioni complete "
+                              "di luci e tasti."))
 
         row = QHBoxLayout()
         self.name = QLineEdit()
@@ -67,14 +70,14 @@ class ProfilesPage(QWidget):
     def save_current(self):
         name = self.name.text().strip()
         if not name or self.keys is None:
-            self.status.setText("Dai un nome al profilo.")
+            note(self.status, "Dai un nome al profilo.", "error")
             return
         profile = self.keys.get_profile(name)
         profile.lighting = self._lighting_state()
         store.save_profile(profile)
         self.name.clear()
         self.reload()
-        self.status.setText(f"Profilo '{profile.name}' salvato.")
+        note(self.status, f"Profilo '{profile.name}' salvato.", "ok")
 
     def apply_selected(self):
         items = self.plist.selectedItems()
@@ -83,9 +86,10 @@ class ProfilesPage(QWidget):
         try:
             ok, msg = apply_profile(store.load_profile(items[0].text()))
         except RuntimeError as e:
-            self.status.setText(f"Errore: {e}")
+            note(self.status, f"Errore: {e}", "error")
             return
-        self.status.setText(msg if ok else f"Errore: {msg}")
+        note(self.status, msg if ok else f"Errore: {msg}",
+             "ok" if ok else "error")
 
     def delete_selected(self):
         import os

@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (QColorDialog, QComboBox, QGroupBox, QHBoxLayout,
                                QLabel, QListWidget, QPushButton, QVBoxLayout,
                                QWidget)
 
+from drevo_control.gui.widgets import hint, note, toggle_empty
 from drevo_control.oslayer.daemon import pause_daemon, resume_daemon
 from drevo_control.protocol import board as B
 from drevo_control.protocol.commands import indiv_packet
@@ -25,6 +26,8 @@ class PerKeyPage(QWidget):
         title = QLabel("Per-key")
         title.setObjectName("title")
         layout.addWidget(title)
+        layout.addWidget(hint("Colora singoli tasti o l'intera board. "
+                              "I tasti non elencati restano come sono."))
 
         box = QGroupBox("Assegnazioni")
         form = QVBoxLayout(box)
@@ -38,6 +41,8 @@ class PerKeyPage(QWidget):
         add = QPushButton("Aggiungi")
         add.clicked.connect(self._add)
         row.addWidget(self.keysel, 1)
+        self.keysel.lineEdit().setPlaceholderText("cerca tasto…")
+        self.keysel.setCurrentText("")
         row.addWidget(self.swatch)
         row.addWidget(add)
         form.addLayout(row)
@@ -45,6 +50,8 @@ class PerKeyPage(QWidget):
 
         self.assigned = QListWidget()
         form.addWidget(self.assigned)
+        self.empty_note = hint("")
+        form.addWidget(self.empty_note)
         rm = QPushButton("Rimuovi selezionato")
         rm.clicked.connect(self._remove)
         form.addWidget(rm)
@@ -69,6 +76,7 @@ class PerKeyPage(QWidget):
         apply_btn.clicked.connect(self.apply)
         layout.addWidget(apply_btn)
         layout.addWidget(self.status)
+        self._reload_list()
         layout.addStretch(1)
 
     def _pick(self):
@@ -94,12 +102,12 @@ class PerKeyPage(QWidget):
     def _add(self):
         name = self.keysel.currentText().strip()
         if name not in BY_NAME:
-            self.status.setText(f"Tasto sconosciuto: {name}")
+            note(self.status, f"Tasto sconosciuto: {name}", "error")
             return
         c = self.color
         self.pending[name] = (c.red(), c.green(), c.blue())
         self._reload_list()
-        self.status.setText("")
+        note(self.status, "")
 
     def _remove(self):
         for item in self.assigned.selectedItems():
@@ -110,6 +118,8 @@ class PerKeyPage(QWidget):
         self.assigned.clear()
         for name, (r, g, b) in sorted(self.pending.items()):
             self.assigned.addItem(f"{name}  #{r:02x}{g:02x}{b:02x}")
+        toggle_empty(self.empty_note, self.assigned,
+                     "Nessun tasto: cercalo sopra e premi Aggiungi.")
 
     def _write_all(self, packets):
         from drevo_control.oslayer.daemon import pause_enabled
@@ -129,7 +139,7 @@ class PerKeyPage(QWidget):
 
     def apply(self):
         if not self.pending:
-            self.status.setText("Niente da applicare.")
+            note(self.status, "Niente da applicare.")
             return
         names = list(self.pending)
         packets = []
@@ -139,9 +149,13 @@ class PerKeyPage(QWidget):
             packets.append(indiv_packet(ids, [self.pending[n]
                                               for n in group]))
         self._write_all(packets)
-        self.status.setText(f"Applicati {len(names)} tasti.")
+        note(self.status, f"Applicati {len(names)} tasti.", "ok")
 
     def apply_board(self):
         c = self.board_color
         self._write_all(B.kbd_packets((c.red(), c.green(), c.blue())))
-        self.status.setText("Board applicata.")
+        note(self.status, "Board applicata.", "ok")
+
+    def showEvent(self, event):  # noqa: N802 (API Qt)
+        self._reload_list()
+        super().showEvent(event)

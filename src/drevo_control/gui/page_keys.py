@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QGroupBox,
                                QPushButton, QSpinBox, QTextEdit, QVBoxLayout,
                                QWidget)
 
+from drevo_control.gui.widgets import hint, note, toggle_empty
 from drevo_control.oslayer import RemapProfile
 from drevo_control.oslayer.apply import install_keyd_conf, keyd_active
 
@@ -22,6 +23,8 @@ def _key_combo():
     combo = QComboBox()
     combo.setEditable(True)
     combo.addItems(KEYD_KEYS)
+    combo.lineEdit().setPlaceholderText("tasto…")
+    combo.setCurrentText("")
     return combo
 
 
@@ -36,6 +39,8 @@ class KeysPage(QWidget):
         title = QLabel("Tasti e Macro")
         title.setObjectName("title")
         layout.addWidget(title)
+        layout.addWidget(hint("Rimappature e macro via keyd, game-mode con "
+                              "toggle. Installa quando hai finito."))
 
         self.remap_list = QListWidget()
         box = QGroupBox("Rimappature")
@@ -51,6 +56,8 @@ class KeysPage(QWidget):
         row.addWidget(add)
         form.addLayout(row)
         form.addWidget(self.remap_list)
+        self.remap_empty = hint("")
+        form.addWidget(self.remap_empty)
         rm = QPushButton("Rimuovi selezionato")
         rm.clicked.connect(lambda: self._remove_sel(self.remap_list,
                                                     self._remaps))
@@ -77,6 +84,8 @@ class KeysPage(QWidget):
         row2.addWidget(add2)
         form2.addLayout(row2)
         form2.addWidget(self.macro_list)
+        self.macro_empty = hint("")
+        form2.addWidget(self.macro_empty)
         rm2 = QPushButton("Rimuovi selezionato")
         rm2.clicked.connect(lambda: self._remove_sel(self.macro_list,
                                                      self._macros))
@@ -109,6 +118,7 @@ class KeysPage(QWidget):
         layout.addLayout(actions)
         layout.addWidget(self.status)
         layout.addStretch(1)
+        self._reload_lists()
 
     # -- stato ---------------------------------------------------------
     def get_profile(self, name="bozza"):
@@ -132,9 +142,12 @@ class KeysPage(QWidget):
         self.remap_list.clear()
         for s, d in sorted(self._remaps.items()):
             self.remap_list.addItem(f"{s} → {d}")
+        toggle_empty(self.remap_empty, self.remap_list,
+                     "Nessuna rimappatura.")
         self.macro_list.clear()
         for k, seq in sorted(self._macros.items()):
             self.macro_list.addItem(f"{k} = {' '.join(seq)}")
+        toggle_empty(self.macro_empty, self.macro_list, "Nessuna macro.")
 
     # -- editing -------------------------------------------------------
     def _add_remap(self):
@@ -174,13 +187,14 @@ class KeysPage(QWidget):
         import subprocess
 
         if not keyd_active():
-            self.status.setText("keyd non attivo: installalo da Impostazioni.")
+            note(self.status, "keyd non attivo: installalo da Impostazioni.",
+                 "error")
             return
         cur = subprocess.run(["sudo", "-n", "cat", "/etc/keyd/keyd.conf"],
                              capture_output=True, text=True)
         self._backup_conf = cur.stdout if cur.returncode == 0 else None
         ok, msg = install_keyd_conf(self.get_profile())
-        self.status.setText(msg)
+        note(self.status, msg, "ok" if ok else "error")
         self.restore_btn.setEnabled(ok and self._backup_conf is not None)
 
     def _restore(self):
@@ -194,5 +208,5 @@ class KeysPage(QWidget):
                         "/tmp/opencode/keyd-restore.conf",
                         "/etc/keyd/keyd.conf"])
         subprocess.run(["sudo", "-n", "systemctl", "restart", "keyd"])
-        self.status.setText("Config precedente ripristinata.")
+        note(self.status, "Config precedente ripristinata.", "ok")
         self.restore_btn.setEnabled(False)
