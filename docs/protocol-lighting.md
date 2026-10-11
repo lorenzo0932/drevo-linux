@@ -62,6 +62,8 @@ mem.txt` in /tmp/opencode (non committate).
 originale; `tests/test_commands.py` li confronta ai byte catturati;
 test hardware 2026-10-11: `cli static 10 20 30` produce byte identici
 al riferimento e il device risponde.
+Sequenza live 5 effetti (static/breath/stream/radar/mem) confermata
+visivamente, default ripristinato dal daemon.
 
 ## Note
 - GET feature report non supportato dal device (solo SET/OUT).
