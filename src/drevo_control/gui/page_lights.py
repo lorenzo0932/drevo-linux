@@ -130,6 +130,9 @@ class LightsPage(QWidget):
             pause_daemon()
         try:
             write_packet(pkt)
+        except RuntimeError as e:
+            note(self.status, f"Errore: {e}", "error")
+            return
         finally:
             if paused:
                 resume_daemon()

@@ -156,13 +156,18 @@ class PerKeyPage(QWidget):
         try:
             with hid_writer_lock() as locked:
                 if not locked:
-                    raise RuntimeError("writer HID occupato")
+                    note(self.status, "Writer HID occupato.", "error")
+                    return False
                 with open_control() as dev:
                     for pkt in packets:
                         dev.write(pkt)
+        except RuntimeError as e:
+            note(self.status, f"Errore: {e}", "error")
+            return False
         finally:
             if paused:
                 resume_daemon()
+        return True
 
     def apply(self):
         if not self.pending:
@@ -175,13 +180,13 @@ class PerKeyPage(QWidget):
             ids = [BY_NAME[n] for n in group]
             packets.append(indiv_packet(ids, [self.pending[n]
                                               for n in group]))
-        self._write_all(packets)
-        note(self.status, f"Applicati {len(names)} tasti.", "ok")
+        if self._write_all(packets):
+            note(self.status, f"Applicati {len(names)} tasti.", "ok")
 
     def apply_board(self):
         c = self.board_color
-        self._write_all(B.kbd_packets((c.red(), c.green(), c.blue())))
-        note(self.status, "Board applicata.", "ok")
+        if self._write_all(B.kbd_packets((c.red(), c.green(), c.blue()))):
+            note(self.status, "Board applicata.", "ok")
 
     def showEvent(self, event):  # noqa: N802 (API Qt)
         self._reload_list()

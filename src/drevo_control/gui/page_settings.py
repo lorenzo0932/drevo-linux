@@ -57,13 +57,15 @@ class SettingsPage(QWidget):
         self.pause.toggled.connect(
             lambda v: self._settings.setValue("daemon/pause", bool(v)))
         form2.addWidget(self.pause)
-        self.ambilight_info = hint(
+        self.ambilight_info = QLabel(
             "Ambilight: automazione esterna che segue i colori dello schermo "
-            "(repo dotfiles: myScript/GameMode/drevo_keyboard_sync.py, "
-            "unit systemd/user/ambilight-keyboard.service, "
-            "docs in myScript/ScriptsOverview.md). La pausa evita scritture "
+            "(<a href='https://github.com/lorenzo0932/dotfiles/tree/main/"
+            "myScript/GameMode'>repo dotfiles: myScript/GameMode</a>, unit "
+            "systemd/user/ambilight-keyboard.service, docs in "
+            "myScript/ScriptsOverview.md). La pausa evita scritture "
             "concorrenti sull'HID.")
         self.ambilight_info.setWordWrap(True)
+        self.ambilight_info.setOpenExternalLinks(True)
         form2.addWidget(self.ambilight_info)
         coord_box = QWidget()
         coord_box.setLayout(form2)

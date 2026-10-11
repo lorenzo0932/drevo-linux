@@ -94,7 +94,17 @@ class ProfilesPage(QWidget):
     def delete_selected(self):
         import os
 
-        for item in self.plist.selectedItems():
+        from PySide6.QtWidgets import QMessageBox
+        items = self.plist.selectedItems()
+        if not items:
+            return
+        answer = QMessageBox.question(
+            self, "Elimina profilo",
+            f"Eliminare '{items[0].text()}'?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if answer != QMessageBox.Yes:
+            return
+        for item in items:
             try:
                 os.remove(store.profile_path(item.text()))
             except OSError:

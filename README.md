@@ -18,6 +18,29 @@ Solo userspace + udev, un solo writer HID alla volta, scritture solo su
 evento (il controller Winbond va in reset-loop con scritture frequenti).
 Reverse solo black-box da DPC in VM; niente decompilazione.
 
+## Installazione (qualunque distro)
+
+Requisiti: Python 3.10+. L'accesso HID usa `hidapi` (le wheel `hid`/`PySide6`
+su pip includono i binari; se `import hid` fallisce, installa la libreria
+di sistema, es. `hidapi`).
+
+```sh
+pip install .[gui]
+drevo-control effect static 255 90 0   # CLI
+drevo-control-gui                        # GUI
+```
+
+La GUI richiede l'extra `gui` (PySide6). Regola udev e voce di menu:
+
+```sh
+sudo cp udev/77-drevo-control.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+cp drevo-control.desktop ~/.local/share/applications/
+```
+
+keyd (remap/macro/game-mode) si installa da Impostazioni, dai sorgenti
+senza package manager. Il firmware si aggiorna solo da Windows.
+
 ## Layout
 
 - `src/drevo_control/` — core lib HID + GUI (prossimo)
