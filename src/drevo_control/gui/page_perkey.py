@@ -37,9 +37,11 @@ class PerKeyPage(QWidget):
         view_scroll = QScrollArea()
         view_scroll.setWidgetResizable(True)
         view_scroll.setFrameShape(QScrollArea.NoFrame)
-        view_scroll.setVerticalScrollBarPolicy(
-            Qt.ScrollBarAlwaysOff)
+        view_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        view_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         view_scroll.setWidget(self.view)
+        view_scroll.setSizeAdjustPolicy(
+            QScrollArea.AdjustToContentsOnFirstShow)
         layout.addWidget(view_scroll)
 
         layout.addWidget(section("Assegnazioni"))

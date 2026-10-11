@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
 
         self.nav = QListWidget()
         self.nav.setObjectName("nav")
-        self.nav.setFixedWidth(190)
+        self.nav.setFixedWidth(170)
         self.stack = QStackedWidget()
 
         lights = LightsPage()

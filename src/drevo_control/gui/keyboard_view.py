@@ -2,7 +2,7 @@
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, \
-    QVBoxLayout, QWidget
+    QBoxLayout, QVBoxLayout, QWidget
 
 DISPLAY = {
     "backs": "Bksp", "caps": "Caps", "lshift": "Shift", "rshift": "Shift",
@@ -52,21 +52,22 @@ class KeyboardView(QWidget):
         super().__init__()
         self.caps = {}
         self.selected = None
-        self.setMinimumWidth(480)
-        outer = QHBoxLayout(self)
-        outer.setContentsMargins(0, 0, 0, 0)
-        outer.setSpacing(12)
-        main = QVBoxLayout()
-        main.setSpacing(5)
+        self._stacked = False
+        self.setMinimumWidth(320)
+        self._outer = QHBoxLayout(self)
+        self._outer.setContentsMargins(0, 0, 0, 0)
+        self._outer.setSpacing(12)
+        self._main = QVBoxLayout()
+        self._main.setSpacing(5)
         for row in ROWS:
-            main.addLayout(self._row(row))
-        outer.addLayout(main, 1)
-        nav = QVBoxLayout()
-        nav.setSpacing(5)
+            self._main.addLayout(self._row(row))
+        self._nav = QVBoxLayout()
+        self._nav.setSpacing(5)
         for row in NAV:
-            nav.addLayout(self._row(row))
-        nav.addStretch(1)
-        outer.addLayout(nav)
+            self._nav.addLayout(self._row(row))
+        self._nav.addStretch(1)
+        self._outer.addLayout(self._main, 1)
+        self._outer.addLayout(self._nav)
 
     def _row(self, row):
         layout = QHBoxLayout()
@@ -80,6 +81,7 @@ class KeyboardView(QWidget):
                 layout.addWidget(spacer, int(units * 10))
                 continue
             btn = QPushButton(DISPLAY.get(name, name.upper()))
+            btn.setObjectName("cap")
             btn.setFixedHeight(38)
             btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             btn.setProperty("keyname", name)
@@ -96,12 +98,21 @@ class KeyboardView(QWidget):
 
     def _rescale(self):
         """Font e altezza proporzionali alla larghezza disponibile."""
-        scale = max(0.62, min(1.15, self.width() / self.BASE_WIDTH))
+        if not hasattr(self, "_nav"):
+            return
+        width = self.width()
+        want_stacked = width < 700
+        if want_stacked != self._stacked:
+            self._stacked = want_stacked
+            self._outer.setDirection(
+                QBoxLayout.TopToBottom if want_stacked
+                else QBoxLayout.LeftToRight)
+        scale = max(0.55, min(1.15, width / self.BASE_WIDTH))
         for btn in self.caps.values():
             font = btn.font()
-            font.setPointSizeF(max(7.0, 9.0 * scale))
+            font.setPointSizeF(max(6.5, 9.0 * scale))
             btn.setFont(font)
-            btn.setFixedHeight(max(30, int(40 * scale)))
+            btn.setFixedHeight(max(28, int(40 * scale)))
 
     def resizeEvent(self, event):  # noqa: N802 (API Qt)
         super().resizeEvent(event)

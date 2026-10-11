@@ -1,5 +1,6 @@
 """Pagina Impostazioni: tema, keyd, udev, info app."""
 
+import importlib.resources
 import os
 import shutil
 import subprocess
@@ -58,8 +59,9 @@ class SettingsPage(QWidget):
         form2.addWidget(self.pause)
         self.ambilight_info = hint(
             "Ambilight: automazione esterna che segue i colori dello schermo "
-            "(~/.local/share/myScript/GameMode/drevo_keyboard_sync.py, "
-            "servizio ambilight-keyboard.service). La pausa evita scritture "
+            "(repo dotfiles: myScript/GameMode/drevo_keyboard_sync.py, "
+            "unit systemd/user/ambilight-keyboard.service, "
+            "docs in myScript/ScriptsOverview.md). La pausa evita scritture "
             "concorrenti sull'HID.")
         self.ambilight_info.setWordWrap(True)
         form2.addWidget(self.ambilight_info)
@@ -73,7 +75,7 @@ class SettingsPage(QWidget):
         form3.setSpacing(8)
         self.keyd_label = QLabel()
         row = QHBoxLayout()
-        install = QPushButton("Installa keyd (COPR)")
+        install = QPushButton("Installa keyd (sorgenti)")
         install.clicked.connect(self._install_keyd)
         remove = QPushButton("Rimuovi keyd")
         remove.clicked.connect(self._remove_keyd)
@@ -143,10 +145,12 @@ class SettingsPage(QWidget):
                               timeout=300)
 
     def _install_keyd(self):
-        self.status.setText("Installazione keyd in corso…")
-        r = self._run_priv("bash", "-c",
-                           "dnf copr enable -y fmonteghetti/keyd && "
-                           "dnf install -y keyd")
+        import importlib.resources
+
+        self.status.setText("Installazione keyd dai sorgenti in corso…")
+        with importlib.resources.path("drevo_control.data",
+                                      "keyd_install_src.sh") as script:
+            r = self._run_priv("bash", str(script))
         self.status.setText("keyd installato." if r.returncode == 0
                             else f"Errore: {(r.stderr or '')[:200]}")
         self.refresh_system()
