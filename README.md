@@ -18,6 +18,36 @@ Solo userspace + udev, un solo writer HID alla volta, scritture solo su
 evento (il controller Winbond va in reset-loop con scritture frequenti).
 Reverse solo black-box sul device fisico; niente decompilazione.
 
+## Funzionalità
+
+### Luci
+Effetti firmware (statico, respiro, scorrimento, radar, memoria) con
+colori, luminosità, velocità, direzione e arcobaleno.
+
+![Luci](media/luci.png)
+
+### Per-key
+Tastiera ISO disegnata e cliccabile: colora singoli tasti o l'intera
+board. I tasti non elencati restano come sono.
+
+![Per-key](media/perkey.png)
+
+### Tasti e Macro
+Rimappature, macro con timeout e game-mode con interruttore, via keyd.
+Anteprima config e ripristino in un clic.
+
+![Tasti e Macro](media/tasti-macro.png)
+
+### Profili
+Salva e riapplica configurazioni complete di luci e tasti.
+
+![Profili](media/profili.png)
+
+### Impostazioni
+Tema auto/chiaro/scuro, coordinamento, stato di keyd e udev.
+
+![Impostazioni](media/impostazioni.png)
+
 ## Installazione (un comando)
 
 Copia e incolla in un terminale (funziona dopo il push su GitHub):
